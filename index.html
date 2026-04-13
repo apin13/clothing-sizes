@@ -659,6 +659,13 @@ document.getElementById('btnGoogleSignIn').addEventListener('click', async () =>
 
 document.getElementById('btnLogout').addEventListener('click', () => signOut(auth));
 
+// ── Handle Google redirect result on page load ────────────
+getRedirectResult(auth).catch(err => {
+  if (err && err.code && err.code !== 'auth/no-current-user') {
+    showAuthError(friendlyAuthError(err.code));
+  }
+});
+
 // ── Auth state listener ──────────────────────────────────
 onAuthStateChanged(auth, async user => {
   if (user) {
@@ -667,8 +674,9 @@ onAuthStateChanged(auth, async user => {
     document.getElementById('authScreen').classList.add('hidden');
     document.getElementById('appScreen').classList.remove('hidden');
     // populate user chip
-    document.getElementById('userEmail').textContent = user.email;
-    document.getElementById('userAvatar').textContent = user.email[0].toUpperCase();
+    const displayName = user.displayName || user.email || 'User';
+    document.getElementById('userEmail').textContent = displayName;
+    document.getElementById('userAvatar').textContent = displayName[0].toUpperCase();
     // load data
     await loadEntries();
     render();
