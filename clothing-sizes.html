@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Clothing Sizes</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f4f5f7;
+      --surface: #ffffff;
+      --border: #e0e2e7;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --text: #1e1f26;
+      --muted: #6b7280;
+      --tag-bg: #eef2ff;
+      --tag-color: #4f46e5;
+      --radius: 10px;
+      --shadow: 0 1px 4px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .auth-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 16px 0; color: var(--muted); font-size: .8rem;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    .auth-btn-google {
+      width: 100%; padding: 11px;
+      background: var(--surface); color: var(--text);
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: .9rem; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center;
+      justify-content: center; gap: 10px;
+      transition: background .15s, border-color .15s, transform .1s;
+    }
+    .auth-btn-google:hover  { background: var(--bg); border-color: #aaa; }
+    .auth-btn-google:active { transform: scale(.98); }
+    .auth-btn-google:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    .hidden { display: none !important; }
+
+    /* ─────────────────────────────────────────
+       AUTH SCREEN
+    ───────────────────────────────────────── */
+    #authScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+
+    .auth-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .auth-logo svg { color: var(--accent); }
+    .auth-logo h1 { font-size: 1.4rem; font-weight: 700; margin-top: 10px; }
+    .auth-logo p  { font-size: .85rem; color: var(--muted); margin-top: 4px; }
+
+    .auth-tabs {
+      display: flex;
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 24px;
+      gap: 4px;
+    }
+    .auth-tab {
+      flex: 1; text-align: center;
+      padding: 8px; border-radius: 6px;
+      font-size: .875rem; font-weight: 600;
+      cursor: pointer; border: none;
+      background: transparent; color: var(--muted);
+      transition: background .15s, color .15s;
+    }
+    .auth-tab.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+
+    .auth-field {
+      display: flex; flex-direction: column; gap: 6px;
+      margin-bottom: 14px;
+    }
+    .auth-field label { font-size: .82rem; font-weight: 600; color: var(--muted); }
+    .auth-field input {
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px; font-size: .9rem;
+      outline: none; transition: border-color .15s;
+      font-family: inherit;
+    }
+    .auth-field input:focus { border-color: var(--accent); }
+
+    .auth-btn {
+      width: 100%; padding: 11px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 8px;
+      font-size: .95rem; font-weight: 600;
+      cursor: pointer; margin-top: 4px;
+      transition: background .15s, transform .1s;
+    }
+    .auth-btn:hover  { background: var(--accent-hover); }
+    .auth-btn:active { transform: scale(.98); }
+    .auth-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    .auth-error {
+      background: #fee2e2; color: #b91c1c;
+      border-radius: 8px; padding: 10px 12px;
+      font-size: .83rem; margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    /* ─────────────────────────────────────────
+       SETUP BANNER (shown when config missing)
+    ───────────────────────────────────────── */
+    .setup-banner {
+      background: #fef9c3; border: 1.5px solid #fde047;
+      border-radius: 10px; padding: 16px 18px;
+      font-size: .85rem; line-height: 1.7; color: #713f12;
+      margin-bottom: 20px;
+    }
+    .setup-banner strong { display: block; margin-bottom: 6px; font-size: .9rem; }
+    .setup-banner code {
+      background: #fef08a; border-radius: 4px;
+      padding: 1px 5px; font-size: .82rem;
+    }
+    .setup-banner ol { padding-left: 18px; }
+
+    /* ─────────────────────────────────────────
+       MAIN APP SCREEN
+    ───────────────────────────────────────── */
+    #appScreen {
+      padding: 24px 16px 60px;
+    }
+
+    header {
+      max-width: 860px;
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -.5px; }
+    header h1 span { color: var(--accent); }
+
+    .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+    .user-chip {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 999px; padding: 5px 12px 5px 8px;
+      font-size: .82rem; color: var(--muted);
+    }
+    .user-avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem; font-weight: 700; flex-shrink: 0;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border-radius: 8px; border: none;
+      cursor: pointer; font-size: .9rem; font-weight: 600;
+      transition: background .15s, transform .1s;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-ghost { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+    .btn-ghost:hover { background: var(--tag-bg); }
+    .btn-logout { background: transparent; color: var(--muted); border: 1.5px solid var(--border); font-size: .82rem; padding: 6px 12px; }
+    .btn-logout:hover { border-color: var(--danger); color: var(--danger); background: #fee2e2; }
+
+    .controls {
+      max-width: 860px; margin: 0 auto 20px;
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+
+    .search-wrap { position: relative; flex: 1 1 200px; }
+    .search-wrap svg {
+      position: absolute; left: 10px; top: 50%;
+      transform: translateY(-50%); color: var(--muted); pointer-events: none;
+    }
+    .search-wrap input {
+      width: 100%; padding: 9px 12px 9px 34px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      background: var(--surface); font-size: .9rem; outline: none;
+      transition: border-color .15s;
+    }
+    .search-wrap input:focus { border-color: var(--accent); }
+
+    select {
+      padding: 9px 12px; border: 1.5px solid var(--border);
+      border-radius: 8px; background: var(--surface);
+      font-size: .9rem; outline: none; cursor: pointer;
+      transition: border-color .15s;
+    }
+    select:focus { border-color: var(--accent); }
+
+    .grid {
+      max-width: 860px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 18px; display: flex; flex-direction: column; gap: 10px;
+      transition: box-shadow .2s;
+    }
+    .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.12); }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .card-brand { font-size: 1.05rem; font-weight: 700; line-height: 1.3; }
+    .card-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+    .icon-btn {
+      background: none; border: none; cursor: pointer;
+      padding: 4px; border-radius: 6px; color: var(--muted);
+      display: flex; align-items: center;
+      transition: background .15s, color .15s;
+    }
+    .icon-btn.edit:hover { background: #eef2ff; color: var(--accent); }
+    .icon-btn.del:hover  { background: #fee2e2; color: var(--danger); }
+
+    .tag {
+      display: inline-block; background: var(--tag-bg); color: var(--tag-color);
+      border-radius: 999px; padding: 2px 10px;
+      font-size: .75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .4px;
+    }
+
+    .size-display { font-size: 2rem; font-weight: 800; color: var(--accent); line-height: 1; }
+    .card-meta { font-size: .8rem; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+    .notes {
+      font-size: .82rem; color: var(--muted); background: var(--bg);
+      border-radius: 6px; padding: 8px 10px; line-height: 1.5;
+    }
+
+    .empty {
+      max-width: 860px; margin: 60px auto 0;
+      text-align: center; color: var(--muted);
+    }
+    .empty svg { margin-bottom: 16px; opacity: .4; }
+    .empty p { font-size: 1rem; margin-bottom: 20px; }
+
+    /* ─────────────────────────────────────────
+       ENTRY MODAL
+    ───────────────────────────────────────── */
+    .overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.45);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100; padding: 16px; animation: fadeIn .15s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal {
+      background: var(--surface); border-radius: var(--radius);
+      width: 100%; max-width: 460px; padding: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+      animation: slideUp .2s ease;
+      max-height: 90vh; overflow-y: auto;
+    }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    .modal h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; }
+    .form-row { display: flex; gap: 12px; }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; flex: 1; }
+    .field label { font-size: .82rem; font-weight: 600; color: var(--muted); }
+    .field input, .field select, .field textarea {
+      padding: 9px 12px; border: 1.5px solid var(--border);
+      border-radius: 8px; font-size: .9rem; background: var(--surface);
+      outline: none; transition: border-color .15s; font-family: inherit;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
+    .field textarea { resize: vertical; min-height: 70px; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+
+    /* loading spinner */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     AUTH SCREEN
+════════════════════════════════════════ -->
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/>
+      </svg>
+      <h1>My Clothing Sizes</h1>
+      <p>Track your sizes across every brand</p>
+    </div>
+
+    <!-- Config missing warning — hidden once config is filled -->
+    <div class="setup-banner hidden" id="setupBanner">
+      <strong>⚙️ Firebase setup required</strong>
+      <ol>
+        <li>Go to <strong>console.firebase.google.com</strong> → New project</li>
+        <li>Authentication → Sign-in method → Enable <strong>Email/Password</strong></li>
+        <li>Firestore Database → Create database (start in <strong>production mode</strong>)</li>
+        <li>Project settings → Your apps → Web app → Copy config</li>
+        <li>Replace <code>REPLACE_WITH_YOUR_*</code> values at the top of this file's <code>&lt;script&gt;</code></li>
+      </ol>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabSignIn">Sign In</button>
+      <button class="auth-tab"        id="tabRegister">Create Account</button>
+    </div>
+
+    <div id="authError" class="auth-error hidden"></div>
+
+    <div class="auth-field">
+      <label>Email</label>
+      <input id="aEmail" type="email" placeholder="you@example.com" autocomplete="email" />
+    </div>
+    <div class="auth-field">
+      <label>Password</label>
+      <input id="aPassword" type="password" placeholder="••••••••" autocomplete="current-password" />
+    </div>
+
+    <button class="auth-btn" id="authSubmitBtn">Sign In</button>
+
+    <div class="auth-divider">
+      <span>or</span>
+    </div>
+
+    <button class="auth-btn-google" id="btnGoogleSignIn">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+      Continue with Google
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MAIN APP SCREEN
+════════════════════════════════════════ -->
+<div id="appScreen" class="hidden">
+
+  <header>
+    <h1>My <span>Clothing</span> Sizes</h1>
+    <div class="header-right">
+      <div class="user-chip">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <span id="userEmail">—</span>
+      </div>
+      <button class="btn btn-logout" id="btnLogout">Sign out</button>
+      <button class="btn btn-primary" id="btnAddHeader">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        Add Size
+      </button>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search" placeholder="Search brand or type…" />
+    </div>
+    <select id="filterType"><option value="">All types</option></select>
+    <select id="filterBrand"><option value="">All brands</option></select>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="empty hidden" id="empty">
+    <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24">
+      <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/>
+    </svg>
+    <p id="emptyMsg">No sizes recorded yet. Add your first one!</p>
+    <button class="btn btn-primary" id="btnAddEmpty">Add Size</button>
+  </div>
+
+  <!-- Entry Modal -->
+  <div class="overlay hidden" id="overlay">
+    <div class="modal">
+      <h2 id="modalTitle">Add Clothing Size</h2>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Brand *</label>
+          <input id="fBrand" type="text" placeholder="e.g. Nike, Zara, Levi's" list="brandList" />
+          <datalist id="brandList"></datalist>
+        </div>
+        <div class="field">
+          <label>Type *</label>
+          <select id="fType">
+            <option value="">— select type —</option>
+            <option>T-Shirt</option>
+            <option>Shirt / Button-up</option>
+            <option>Sweater / Hoodie</option>
+            <option>Jacket / Coat</option>
+            <option>Suit / Blazer</option>
+            <option>Dress</option>
+            <option>Pants / Trousers</option>
+            <option>Jeans</option>
+            <option>Shorts</option>
+            <option>Skirt</option>
+            <option>Shoes / Sneakers</option>
+            <option>Boots</option>
+            <option>Sandals</option>
+            <option>Socks</option>
+            <option>Underwear</option>
+            <option>Hat / Cap</option>
+            <option>Belt</option>
+            <option>Swimwear</option>
+            <option value="__other__">Other (custom)…</option>
+          </select>
+          <input id="fTypeCustom" type="text" placeholder="Enter custom type" class="hidden" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Size / Label *</label>
+          <input id="fSize" type="text" placeholder="e.g. M, 32x30, 10.5, XL" />
+        </div>
+        <div class="field">
+          <label>Measurement System</label>
+          <select id="fSystem">
+            <option value="">— select —</option>
+            <option>US</option>
+            <option>EU</option>
+            <option>UK</option>
+            <option>International (S/M/L)</option>
+            <option>FR/IT</option>
+            <option>JP</option>
+            <option>CN</option>
+            <option>Brand-specific</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Chest / Width (cm)</label>
+          <input id="fChest" type="number" placeholder="e.g. 96" />
+        </div>
+        <div class="field">
+          <label>Waist (cm)</label>
+          <input id="fWaist" type="number" placeholder="e.g. 78" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Length / Inseam (cm)</label>
+          <input id="fLength" type="number" placeholder="e.g. 76" />
+        </div>
+        <div class="field"></div>
+      </div>
+
+      <div class="field">
+        <label>Notes</label>
+        <textarea id="fNotes" placeholder="e.g. Runs small — size up. Fits snug in shoulders."></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="btnCancel">Cancel</button>
+        <button class="btn btn-primary" id="btnSave">Save</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #appScreen -->
+
+<!-- ═══════════════════════════════════════
+     FIREBASE + APP LOGIC
+════════════════════════════════════════ -->
+<script type="module">
+// ┌─────────────────────────────────────────────────────────┐
+// │  STEP 1 — Replace these values with your Firebase config │
+// │  (Project settings → Your apps → Web app → Config)      │
+// └─────────────────────────────────────────────────────────┘
+const firebaseConfig = {
+  apiKey:            "AIzaSyClCDoqW_8JCb_ARxDhbCSwvS6D49SgAIo",
+  authDomain:        "clothing-sizes.firebaseapp.com",
+  projectId:         "clothing-sizes",
+  storageBucket:     "clothing-sizes.firebasestorage.app",
+  messagingSenderId: "67596841716",
+  appId:             "1:67596841716:web:90af8fea59b2ee562124a1"
+};
+
+// ┌─────────────────────────────────────────────────────────┐
+// │  STEP 2 — Firestore security rules (paste in Firebase)   │
+// │                                                          │
+// │  rules_version = '2';                                    │
+// │  service cloud.firestore {                               │
+// │    match /databases/{database}/documents {               │
+// │      match /users/{uid}/sizes/{id} {                     │
+// │        allow read, write: if request.auth.uid == uid;    │
+// │      }                                                   │
+// │    }                                                     │
+// │  }                                                       │
+// └─────────────────────────────────────────────────────────┘
+
+import { initializeApp }                                from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, createUserWithEmailAndPassword,
+         signInWithEmailAndPassword, signOut,
+         onAuthStateChanged, GoogleAuthProvider,
+         signInWithPopup }                             from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getFirestore, collection, getDocs,
+         addDoc, updateDoc, deleteDoc, doc }            from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+// ── Detect unconfigured state ────────────────────────────
+const isConfigured = !firebaseConfig.apiKey.startsWith('REPLACE');
+if (!isConfigured) {
+  document.getElementById('setupBanner').classList.remove('hidden');
+}
+
+// ── Firebase init ────────────────────────────────────────
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+// ── State ────────────────────────────────────────────────
+let currentUser = null;
+let entries     = [];
+let editId      = null;
+
+// ════════════════════════════════════════════════════════
+//  AUTH
+// ════════════════════════════════════════════════════════
+let authMode = 'signin'; // 'signin' | 'register'
+
+const tabSignIn   = document.getElementById('tabSignIn');
+const tabRegister = document.getElementById('tabRegister');
+const authBtn     = document.getElementById('authSubmitBtn');
+const authError   = document.getElementById('authError');
+
+function setAuthMode(mode) {
+  authMode = mode;
+  if (mode === 'signin') {
+    tabSignIn.classList.add('active');
+    tabRegister.classList.remove('active');
+    authBtn.textContent = 'Sign In';
+    document.querySelector('.auth-field:last-of-type label').textContent = 'Password';
+    document.getElementById('aPassword').autocomplete = 'current-password';
+  } else {
+    tabRegister.classList.add('active');
+    tabSignIn.classList.remove('active');
+    authBtn.textContent = 'Create Account';
+    document.querySelector('.auth-field:last-of-type label').textContent = 'Password (min 6 chars)';
+    document.getElementById('aPassword').autocomplete = 'new-password';
+  }
+  hideAuthError();
+}
+
+function showAuthError(msg) {
+  authError.textContent = msg;
+  authError.classList.remove('hidden');
+}
+function hideAuthError() {
+  authError.classList.add('hidden');
+}
+
+function friendlyAuthError(code) {
+  const map = {
+    'auth/invalid-email':            'Please enter a valid email address.',
+    'auth/user-not-found':           'No account found with that email.',
+    'auth/wrong-password':           'Incorrect password. Please try again.',
+    'auth/invalid-credential':       'Incorrect email or password.',
+    'auth/email-already-in-use':     'An account with this email already exists.',
+    'auth/weak-password':            'Password must be at least 6 characters.',
+    'auth/too-many-requests':        'Too many attempts. Please wait a moment and try again.',
+    'auth/network-request-failed':   'Network error. Check your connection.',
+    'auth/api-key-not-valid':        'Firebase API key is not configured. See setup instructions above.',
+  };
+  return map[code] || 'Something went wrong. Please try again.';
+}
+
+tabSignIn.addEventListener('click',   () => setAuthMode('signin'));
+tabRegister.addEventListener('click', () => setAuthMode('register'));
+
+authBtn.addEventListener('click', async () => {
+  const email    = document.getElementById('aEmail').value.trim();
+  const password = document.getElementById('aPassword').value;
+  if (!email || !password) { showAuthError('Please enter your email and password.'); return; }
+
+  authBtn.disabled = true;
+  authBtn.innerHTML = '<span class="spinner"></span>';
+  hideAuthError();
+
+  try {
+    if (authMode === 'signin') {
+      await signInWithEmailAndPassword(auth, email, password);
+    } else {
+      await createUserWithEmailAndPassword(auth, email, password);
+    }
+  } catch (err) {
+    showAuthError(friendlyAuthError(err.code));
+    authBtn.disabled = false;
+    authBtn.textContent = authMode === 'signin' ? 'Sign In' : 'Create Account';
+  }
+});
+
+document.getElementById('btnGoogleSignIn').addEventListener('click', async () => {
+  const btn = document.getElementById('btnGoogleSignIn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" style="border-top-color:var(--accent);border-color:var(--border);border-top-color:var(--accent)"></span> Signing in…';
+  hideAuthError();
+  try {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    if (err.code !== 'auth/popup-closed-by-user') {
+      showAuthError(friendlyAuthError(err.code));
+    }
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg> Continue with Google';
+  }
+});
+
+// submit on Enter key in auth fields
+['aEmail','aPassword'].forEach(id => {
+  document.getElementById(id).addEventListener('keydown', e => {
+    if (e.key === 'Enter') authBtn.click();
+  });
+});
+
+document.getElementById('btnLogout').addEventListener('click', () => signOut(auth));
+
+// ── Auth state listener ──────────────────────────────────
+onAuthStateChanged(auth, async user => {
+  if (user) {
+    currentUser = user;
+    // show app
+    document.getElementById('authScreen').classList.add('hidden');
+    document.getElementById('appScreen').classList.remove('hidden');
+    // populate user chip
+    document.getElementById('userEmail').textContent = user.email;
+    document.getElementById('userAvatar').textContent = user.email[0].toUpperCase();
+    // load data
+    await loadEntries();
+    render();
+  } else {
+    currentUser = null;
+    entries = [];
+    document.getElementById('appScreen').classList.add('hidden');
+    document.getElementById('authScreen').classList.remove('hidden');
+    authBtn.disabled = false;
+    authBtn.textContent = authMode === 'signin' ? 'Sign In' : 'Create Account';
+  }
+});
+
+// ════════════════════════════════════════════════════════
+//  FIRESTORE CRUD
+// ════════════════════════════════════════════════════════
+function sizesRef() {
+  return collection(db, 'users', currentUser.uid, 'sizes');
+}
+
+async function loadEntries() {
+  const snap = await getDocs(sizesRef());
+  entries = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+async function addEntry(data) {
+  const ref = await addDoc(sizesRef(), data);
+  entries.push({ id: ref.id, ...data });
+}
+
+async function updateEntry(id, data) {
+  await updateDoc(doc(db, 'users', currentUser.uid, 'sizes', id), data);
+  const idx = entries.findIndex(e => e.id === id);
+  if (idx !== -1) entries[idx] = { id, ...data };
+}
+
+async function removeEntry(id) {
+  await deleteDoc(doc(db, 'users', currentUser.uid, 'sizes', id));
+  entries = entries.filter(e => e.id !== id);
+}
+
+// ════════════════════════════════════════════════════════
+//  RENDER
+// ════════════════════════════════════════════════════════
+function esc(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function render() {
+  const q      = document.getElementById('search').value.toLowerCase();
+  const typeF  = document.getElementById('filterType').value;
+  const brandF = document.getElementById('filterBrand').value;
+
+  const filtered = entries.filter(e => {
+    const matchQ     = !q || e.brand.toLowerCase().includes(q) || e.type.toLowerCase().includes(q);
+    const matchType  = !typeF  || e.type  === typeF;
+    const matchBrand = !brandF || e.brand === brandF;
+    return matchQ && matchType && matchBrand;
+  });
+
+  const grid  = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+
+  grid.innerHTML = '';
+
+  if (filtered.length === 0) {
+    grid.classList.add('hidden');
+    empty.classList.remove('hidden');
+    document.getElementById('emptyMsg').textContent = entries.length === 0
+      ? 'No sizes recorded yet. Add your first one!'
+      : 'No results match your filter.';
+    document.getElementById('btnAddEmpty').classList.toggle('hidden', entries.length > 0);
+  } else {
+    grid.classList.remove('hidden');
+    empty.classList.add('hidden');
+    filtered.forEach(e => grid.appendChild(makeCard(e)));
+  }
+
+  updateFilters();
+}
+
+function makeCard(e) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  const measurements = [];
+  if (e.chest)  measurements.push('Chest/W: ' + e.chest + ' cm');
+  if (e.waist)  measurements.push('Waist: '   + e.waist + ' cm');
+  if (e.length) measurements.push('Length: '  + e.length + ' cm');
+
+  card.innerHTML =
+    '<div class="card-header">' +
+      '<div class="card-brand">' + esc(e.brand) + '</div>' +
+      '<div class="card-actions">' +
+        '<button class="icon-btn edit" data-id="' + e.id + '" data-action="edit" title="Edit">' +
+          '<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">' +
+            '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>' +
+            '<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>' +
+          '</svg>' +
+        '</button>' +
+        '<button class="icon-btn del" data-id="' + e.id + '" data-action="delete" title="Delete">' +
+          '<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">' +
+            '<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>' +
+            '<path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>' +
+          '</svg>' +
+        '</button>' +
+      '</div>' +
+    '</div>' +
+    '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">' +
+      '<span class="tag">' + esc(e.type) + '</span>' +
+      (e.system ? '<span style="font-size:.75rem;color:var(--muted)">' + esc(e.system) + '</span>' : '') +
+    '</div>' +
+    '<div class="size-display">' + esc(e.size) + '</div>' +
+    (measurements.length ? '<div class="card-meta">' + measurements.map(m => '<span>' + m + '</span>').join('') + '</div>' : '') +
+    (e.notes ? '<div class="notes">' + esc(e.notes) + '</div>' : '');
+
+  return card;
+}
+
+function updateFilters() {
+  const brands = [...new Set(entries.map(e => e.brand))].sort();
+  const types  = [...new Set(entries.map(e => e.type))].sort();
+
+  const tf = document.getElementById('filterType');
+  const bf = document.getElementById('filterBrand');
+  const curType  = tf.value;
+  const curBrand = bf.value;
+
+  tf.innerHTML = '<option value="">All types</option>'  + types.map(t  => `<option${t===curType?' selected':''}>${esc(t)}</option>`).join('');
+  bf.innerHTML = '<option value="">All brands</option>' + brands.map(b => `<option${b===curBrand?' selected':''}>${esc(b)}</option>`).join('');
+  document.getElementById('brandList').innerHTML = brands.map(b => `<option value="${esc(b)}">`).join('');
+}
+
+// ════════════════════════════════════════════════════════
+//  ENTRY MODAL
+// ════════════════════════════════════════════════════════
+const PRESET_TYPES = [
+  'T-Shirt','Shirt / Button-up','Sweater / Hoodie','Jacket / Coat',
+  'Suit / Blazer','Dress','Pants / Trousers','Jeans','Shorts','Skirt',
+  'Shoes / Sneakers','Boots','Sandals','Socks','Underwear',
+  'Hat / Cap','Belt','Swimwear'
+];
+
+function setTypeField(value) {
+  const sel    = document.getElementById('fType');
+  const custom = document.getElementById('fTypeCustom');
+  if (PRESET_TYPES.includes(value) || value === '') {
+    sel.value = value;
+    custom.classList.add('hidden');
+    custom.value = '';
+  } else {
+    sel.value = '__other__';
+    custom.classList.remove('hidden');
+    custom.value = value;
+  }
+}
+
+function getTypeValue() {
+  const sel = document.getElementById('fType');
+  return sel.value === '__other__'
+    ? document.getElementById('fTypeCustom').value.trim()
+    : sel.value;
+}
+
+function openModal(id) {
+  editId = id || null;
+  document.getElementById('modalTitle').textContent = editId ? 'Edit Clothing Size' : 'Add Clothing Size';
+
+  if (editId) {
+    const e = entries.find(x => x.id === editId);
+    document.getElementById('fBrand').value  = e.brand;
+    setTypeField(e.type);
+    document.getElementById('fSize').value   = e.size;
+    document.getElementById('fSystem').value = e.system || '';
+    document.getElementById('fChest').value  = e.chest  || '';
+    document.getElementById('fWaist').value  = e.waist  || '';
+    document.getElementById('fLength').value = e.length || '';
+    document.getElementById('fNotes').value  = e.notes  || '';
+  } else {
+    ['fBrand','fSize','fChest','fWaist','fLength','fNotes'].forEach(id => { document.getElementById(id).value = ''; });
+    document.getElementById('fSystem').value = '';
+    setTypeField('');
+  }
+
+  document.getElementById('overlay').classList.remove('hidden');
+  document.getElementById('fBrand').focus();
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.add('hidden');
+  editId = null;
+}
+
+async function saveEntry() {
+  const brand  = document.getElementById('fBrand').value.trim();
+  const type   = getTypeValue();
+  const size   = document.getElementById('fSize').value.trim();
+  const system = document.getElementById('fSystem').value;
+  const chest  = document.getElementById('fChest').value.trim();
+  const waist  = document.getElementById('fWaist').value.trim();
+  const length = document.getElementById('fLength').value.trim();
+  const notes  = document.getElementById('fNotes').value.trim();
+
+  if (!brand || !type || !size) { alert('Brand, Type, and Size are required.'); return; }
+
+  const saveBtn = document.getElementById('btnSave');
+  saveBtn.disabled = true;
+  saveBtn.innerHTML = '<span class="spinner"></span>';
+
+  try {
+    const data = { brand, type, size, system, chest, waist, length, notes };
+    if (editId) {
+      await updateEntry(editId, data);
+    } else {
+      await addEntry(data);
+    }
+    closeModal();
+    render();
+  } catch (err) {
+    alert('Failed to save: ' + err.message);
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = 'Save';
+  }
+}
+
+async function deleteEntry(id) {
+  const e = entries.find(x => x.id === id);
+  if (!e) return;
+  if (!confirm(`Delete "${e.brand} – ${e.type} (${e.size})"?`)) return;
+  try {
+    await removeEntry(id);
+    render();
+  } catch (err) {
+    alert('Failed to delete: ' + err.message);
+  }
+}
+
+// ════════════════════════════════════════════════════════
+//  EVENT LISTENERS
+// ════════════════════════════════════════════════════════
+document.getElementById('btnAddHeader').addEventListener('click', () => openModal());
+document.getElementById('btnAddEmpty').addEventListener('click',  () => openModal());
+document.getElementById('btnCancel').addEventListener('click',    closeModal);
+document.getElementById('btnSave').addEventListener('click',      saveEntry);
+
+document.getElementById('fType').addEventListener('change', function() {
+  const custom = document.getElementById('fTypeCustom');
+  if (this.value === '__other__') { custom.classList.remove('hidden'); custom.focus(); }
+  else { custom.classList.add('hidden'); custom.value = ''; }
+});
+
+document.getElementById('search').addEventListener('input', render);
+document.getElementById('filterType').addEventListener('change', render);
+document.getElementById('filterBrand').addEventListener('change', render);
+
+document.getElementById('grid').addEventListener('click', e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  if (btn.dataset.action === 'edit')   openModal(btn.dataset.id);
+  if (btn.dataset.action === 'delete') deleteEntry(btn.dataset.id);
+});
+
+document.getElementById('overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('overlay')) closeModal();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>
