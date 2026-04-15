@@ -23,304 +23,167 @@
       --shadow: 0 1px 4px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
     }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    .auth-divider {
-      display: flex; align-items: center; gap: 12px;
-      margin: 16px 0; color: var(--muted); font-size: .8rem;
-    }
-    .auth-divider::before, .auth-divider::after {
-      content: ''; flex: 1; height: 1px; background: var(--border);
-    }
-
-    .auth-btn-google {
-      width: 100%; padding: 11px;
-      background: var(--surface); color: var(--text);
-      border: 1.5px solid var(--border); border-radius: 8px;
-      font-size: .9rem; font-weight: 600;
-      cursor: pointer; display: flex; align-items: center;
-      justify-content: center; gap: 10px;
-      transition: background .15s, border-color .15s, transform .1s;
-    }
-    .auth-btn-google:hover  { background: var(--bg); border-color: #aaa; }
-    .auth-btn-google:active { transform: scale(.98); }
-    .auth-btn-google:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
     .hidden { display: none !important; }
 
-    /* ─────────────────────────────────────────
-       AUTH SCREEN
-    ───────────────────────────────────────── */
-    #authScreen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-    }
+    /* ── SPINNER ── */
+    .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    .auth-card {
-      background: var(--surface);
-      border-radius: 16px;
-      padding: 36px 32px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.25);
-    }
-
-    .auth-logo {
-      text-align: center;
-      margin-bottom: 24px;
-    }
+    /* ── AUTH ── */
+    #authScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); }
+    .auth-card { background: var(--surface); border-radius: 16px; padding: 36px 32px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+    .auth-logo { text-align: center; margin-bottom: 24px; }
     .auth-logo svg { color: var(--accent); }
     .auth-logo h1 { font-size: 1.4rem; font-weight: 700; margin-top: 10px; }
     .auth-logo p  { font-size: .85rem; color: var(--muted); margin-top: 4px; }
-
-    .auth-tabs {
-      display: flex;
-      background: var(--bg);
-      border-radius: 8px;
-      padding: 4px;
-      margin-bottom: 24px;
-      gap: 4px;
-    }
-    .auth-tab {
-      flex: 1; text-align: center;
-      padding: 8px; border-radius: 6px;
-      font-size: .875rem; font-weight: 600;
-      cursor: pointer; border: none;
-      background: transparent; color: var(--muted);
-      transition: background .15s, color .15s;
-    }
-    .auth-tab.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
-
-    .auth-field {
-      display: flex; flex-direction: column; gap: 6px;
-      margin-bottom: 14px;
-    }
-    .auth-field label { font-size: .82rem; font-weight: 600; color: var(--muted); }
-    .auth-field input {
-      padding: 10px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px; font-size: .9rem;
-      outline: none; transition: border-color .15s;
-      font-family: inherit;
-    }
+    .auth-tabs { display: flex; background: var(--bg); border-radius: 8px; padding: 4px; margin-bottom: 24px; gap: 4px; }
+    .auth-tab { flex: 1; text-align: center; padding: 8px; border-radius: 6px; font-size: .875rem; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--muted); transition: background .15s, color .15s; }
+    .auth-tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .auth-field { margin-bottom: 14px; }
+    .auth-field label { display: block; font-size: .8rem; font-weight: 600; margin-bottom: 5px; color: var(--muted); }
+    .auth-field input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: .9rem; outline: none; background: var(--surface); transition: border-color .15s; }
     .auth-field input:focus { border-color: var(--accent); }
-
-    .auth-btn {
-      width: 100%; padding: 11px;
-      background: var(--accent); color: #fff;
-      border: none; border-radius: 8px;
-      font-size: .95rem; font-weight: 600;
-      cursor: pointer; margin-top: 4px;
-      transition: background .15s, transform .1s;
-    }
-    .auth-btn:hover  { background: var(--accent-hover); }
+    .auth-btn { width: 100%; padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: .95rem; font-weight: 600; cursor: pointer; margin-top: 4px; transition: background .15s, transform .1s; }
+    .auth-btn:hover { background: var(--accent-hover); }
     .auth-btn:active { transform: scale(.98); }
     .auth-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .auth-error { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 14px; font-size: .85rem; margin-bottom: 14px; }
+    .auth-divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: var(--muted); font-size: .8rem; }
+    .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .auth-btn-google { width: 100%; padding: 11px; background: var(--surface); color: var(--text); border: 1.5px solid var(--border); border-radius: 8px; font-size: .9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background .15s, border-color .15s, transform .1s; }
+    .auth-btn-google:hover { background: var(--bg); border-color: #aaa; }
+    .auth-btn-google:active { transform: scale(.98); }
+    .auth-btn-google:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .setup-banner { background: #fef9c3; border: 1px solid #fde047; border-radius: 8px; padding: 14px 16px; margin-bottom: 20px; font-size: .82rem; line-height: 1.6; }
+    .setup-banner ol { padding-left: 18px; margin-top: 6px; }
 
-    .auth-error {
-      background: #fee2e2; color: #b91c1c;
-      border-radius: 8px; padding: 10px 12px;
-      font-size: .83rem; margin-bottom: 14px;
-      line-height: 1.5;
-    }
-
-    /* ─────────────────────────────────────────
-       SETUP BANNER (shown when config missing)
-    ───────────────────────────────────────── */
-    .setup-banner {
-      background: #fef9c3; border: 1.5px solid #fde047;
-      border-radius: 10px; padding: 16px 18px;
-      font-size: .85rem; line-height: 1.7; color: #713f12;
-      margin-bottom: 20px;
-    }
-    .setup-banner strong { display: block; margin-bottom: 6px; font-size: .9rem; }
-    .setup-banner code {
-      background: #fef08a; border-radius: 4px;
-      padding: 1px 5px; font-size: .82rem;
-    }
-    .setup-banner ol { padding-left: 18px; }
-
-    /* ─────────────────────────────────────────
-       MAIN APP SCREEN
-    ───────────────────────────────────────── */
-    #appScreen {
-      padding: 24px 16px 60px;
-    }
-
-    header {
-      max-width: 860px;
-      margin: 0 auto 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -.5px; }
+    /* ── APP HEADER ── */
+    header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; background: var(--surface); border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px; }
+    header h1 { font-size: 1.2rem; font-weight: 700; }
     header h1 span { color: var(--accent); }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .user-chip { display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg); border-radius: 999px; font-size: .85rem; }
+    .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; flex-shrink: 0; }
 
-    .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-
-    .user-chip {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--surface); border: 1.5px solid var(--border);
-      border-radius: 999px; padding: 5px 12px 5px 8px;
-      font-size: .82rem; color: var(--muted);
-    }
-    .user-avatar {
-      width: 26px; height: 26px; border-radius: 50%;
-      background: var(--accent); color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-size: .75rem; font-weight: 700; flex-shrink: 0;
-    }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 9px 18px; border-radius: 8px; border: none;
-      cursor: pointer; font-size: .9rem; font-weight: 600;
-      transition: background .15s, transform .1s;
-    }
+    /* ── BUTTONS ── */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: .875rem; font-weight: 600; cursor: pointer; border: none; transition: background .15s, transform .1s; }
     .btn:active { transform: scale(.97); }
+    .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:hover { background: var(--accent-hover); }
-    .btn-ghost { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
-    .btn-ghost:hover { background: var(--tag-bg); }
-    .btn-logout { background: transparent; color: var(--muted); border: 1.5px solid var(--border); font-size: .82rem; padding: 6px 12px; }
-    .btn-logout:hover { border-color: var(--danger); color: var(--danger); background: #fee2e2; }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1.5px solid var(--border); }
+    .btn-ghost:hover { background: var(--bg); }
+    .btn-logout { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 6px 12px; font-size: .8rem; }
+    .btn-logout:hover { background: var(--bg); }
+    .btn-admin { background: #1e1f26; color: #fff; padding: 6px 14px; font-size: .8rem; }
+    .btn-admin:hover { background: #333; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover { background: var(--danger-hover); }
+    .icon-btn { background: transparent; border: none; cursor: pointer; padding: 6px; border-radius: 6px; color: var(--muted); transition: background .15s, color .15s; }
+    .icon-btn.edit:hover { background: var(--tag-bg); color: var(--accent); }
+    .icon-btn.del:hover { background: #fef2f2; color: var(--danger); }
 
-    .controls {
-      max-width: 860px; margin: 0 auto 20px;
-      display: flex; gap: 10px; flex-wrap: wrap;
-    }
-
-    .search-wrap { position: relative; flex: 1 1 200px; }
-    .search-wrap svg {
-      position: absolute; left: 10px; top: 50%;
-      transform: translateY(-50%); color: var(--muted); pointer-events: none;
-    }
-    .search-wrap input {
-      width: 100%; padding: 9px 12px 9px 34px;
-      border: 1.5px solid var(--border); border-radius: 8px;
-      background: var(--surface); font-size: .9rem; outline: none;
-      transition: border-color .15s;
-    }
+    /* ── CONTROLS BAR ── */
+    .controls { display: flex; gap: 10px; padding: 14px 24px; flex-wrap: wrap; }
+    .search-wrap { position: relative; flex: 1; min-width: 180px; }
+    .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    .search-wrap input { width: 100%; padding: 9px 12px 9px 34px; border: 1.5px solid var(--border); border-radius: 8px; font-size: .875rem; outline: none; background: var(--surface); }
     .search-wrap input:focus { border-color: var(--accent); }
+    .controls select { padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: .875rem; background: var(--surface); outline: none; cursor: pointer; }
+    .controls select:focus { border-color: var(--accent); }
 
-    select {
-      padding: 9px 12px; border: 1.5px solid var(--border);
-      border-radius: 8px; background: var(--surface);
-      font-size: .9rem; outline: none; cursor: pointer;
-      transition: border-color .15s;
-    }
-    select:focus { border-color: var(--accent); }
+    /* ── GRID / CARDS ── */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; padding: 14px 24px; }
+    .card { background: var(--surface); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 10px; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .card-brand-row { display: flex; align-items: center; gap: 8px; }
+    .card-brand-logo { width: 28px; height: 28px; object-fit: contain; border-radius: 4px; border: 1px solid var(--border); padding: 2px; background: #fff; flex-shrink: 0; }
+    .card-brand-logo-fallback { width: 28px; height: 28px; border-radius: 4px; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .7rem; font-weight: 700; flex-shrink: 0; }
+    .card-brand { font-size: .95rem; font-weight: 700; }
+    .card-actions { display: flex; gap: 2px; }
+    .tag { display: inline-block; padding: 3px 10px; border-radius: 999px; background: var(--tag-bg); color: var(--tag-color); font-size: .75rem; font-weight: 600; }
+    .size-display { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+    .card-meta { display: flex; flex-wrap: wrap; gap: 6px; }
+    .card-meta span { font-size: .78rem; color: var(--muted); background: var(--bg); padding: 3px 8px; border-radius: 6px; }
+    .notes { font-size: .82rem; color: var(--muted); line-height: 1.5; font-style: italic; }
 
-    .grid {
-      max-width: 860px; margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-    }
+    /* ── EMPTY STATE ── */
+    .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 64px 24px; text-align: center; color: var(--muted); }
+    .empty svg { opacity: .3; }
+    .empty p { font-size: .95rem; }
 
-    .card {
-      background: var(--surface); border: 1.5px solid var(--border);
-      border-radius: var(--radius); box-shadow: var(--shadow);
-      padding: 18px; display: flex; flex-direction: column; gap: 10px;
-      transition: box-shadow .2s;
-    }
-    .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.12); }
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-    .card-brand { font-size: 1.05rem; font-weight: 700; line-height: 1.3; }
-    .card-actions { display: flex; gap: 6px; flex-shrink: 0; }
-
-    .icon-btn {
-      background: none; border: none; cursor: pointer;
-      padding: 4px; border-radius: 6px; color: var(--muted);
-      display: flex; align-items: center;
-      transition: background .15s, color .15s;
-    }
-    .icon-btn.edit:hover { background: #eef2ff; color: var(--accent); }
-    .icon-btn.del:hover  { background: #fee2e2; color: var(--danger); }
-
-    .tag {
-      display: inline-block; background: var(--tag-bg); color: var(--tag-color);
-      border-radius: 999px; padding: 2px 10px;
-      font-size: .75rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: .4px;
-    }
-
-    .size-display { font-size: 2rem; font-weight: 800; color: var(--accent); line-height: 1; }
-    .card-meta { font-size: .8rem; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
-    .notes {
-      font-size: .82rem; color: var(--muted); background: var(--bg);
-      border-radius: 6px; padding: 8px 10px; line-height: 1.5;
-    }
-
-    .empty {
-      max-width: 860px; margin: 60px auto 0;
-      text-align: center; color: var(--muted);
-    }
-    .empty svg { margin-bottom: 16px; opacity: .4; }
-    .empty p { font-size: 1rem; margin-bottom: 20px; }
-
-    /* ─────────────────────────────────────────
-       ENTRY MODAL
-    ───────────────────────────────────────── */
-    .overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,.45);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 100; padding: 16px; animation: fadeIn .15s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    .modal {
-      background: var(--surface); border-radius: var(--radius);
-      width: 100%; max-width: 460px; padding: 28px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.2);
-      animation: slideUp .2s ease;
-      max-height: 90vh; overflow-y: auto;
-    }
-    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-    .modal h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; }
-    .form-row { display: flex; gap: 12px; }
-    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; flex: 1; }
-    .field label { font-size: .82rem; font-weight: 600; color: var(--muted); }
-    .field input, .field select, .field textarea {
-      padding: 9px 12px; border: 1.5px solid var(--border);
-      border-radius: 8px; font-size: .9rem; background: var(--surface);
-      outline: none; transition: border-color .15s; font-family: inherit;
-    }
+    /* ── MODAL OVERLAY ── */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+    .modal { background: var(--surface); border-radius: 16px; padding: 28px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+    .modal h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; }
+    .form-row { display: flex; gap: 14px; margin-bottom: 14px; }
+    .form-row .field { flex: 1; min-width: 0; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: .8rem; font-weight: 600; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .03em; }
+    .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: .9rem; background: var(--surface); outline: none; transition: border-color .15s; font-family: inherit; }
     .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
     .field textarea { resize: vertical; min-height: 70px; }
     .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
 
-    /* loading spinner */
-    .spinner {
-      width: 18px; height: 18px;
-      border: 2.5px solid rgba(255,255,255,.4);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin .6s linear infinite;
-      display: inline-block;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    /* ── BRAND CUSTOM SELECT ── */
+    .brand-select-wrap { position: relative; }
+    .brand-trigger { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--surface); cursor: pointer; font-size: .9rem; color: var(--text); text-align: left; transition: border-color .15s; }
+    .brand-trigger:hover, .brand-trigger.open { border-color: var(--accent); }
+    .brand-trigger .bt-logo { width: 22px; height: 22px; object-fit: contain; border-radius: 3px; flex-shrink: 0; }
+    .brand-trigger .bt-label { flex: 1; }
+    .brand-trigger .bt-chevron { color: var(--muted); flex-shrink: 0; transition: transform .15s; }
+    .brand-trigger.open .bt-chevron { transform: rotate(180deg); }
+    .brand-dropdown { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; box-shadow: var(--shadow); max-height: 260px; overflow-y: auto; z-index: 200; }
+    .brand-search-box { position: sticky; top: 0; background: var(--surface); padding: 8px; border-bottom: 1px solid var(--border); }
+    .brand-search-box input { width: 100%; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 6px; font-size: .85rem; outline: none; }
+    .brand-search-box input:focus { border-color: var(--accent); }
+    .brand-opt { display: flex; align-items: center; gap: 10px; padding: 8px 12px; cursor: pointer; font-size: .9rem; transition: background .1s; }
+    .brand-opt:hover { background: var(--bg); }
+    .brand-opt.selected { background: var(--tag-bg); }
+    .brand-opt img { width: 24px; height: 24px; object-fit: contain; border-radius: 3px; border: 1px solid var(--border); padding: 1px; }
+    .brand-opt .brand-opt-fallback { width: 24px; height: 24px; border-radius: 3px; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .65rem; font-weight: 700; flex-shrink: 0; }
+    .brand-opt-add { display: flex; align-items: center; gap: 10px; padding: 9px 12px; cursor: pointer; font-size: .875rem; color: var(--accent); font-weight: 600; border-top: 1px solid var(--border); position: sticky; bottom: 0; background: var(--surface); }
+    .brand-opt-add:hover { background: var(--tag-bg); }
+    .brand-pending-badge { font-size: .7rem; background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 999px; font-weight: 600; margin-left: auto; }
+
+    /* ── SIZE TOGGLE ── */
+    .size-row { display: flex; gap: 8px; align-items: flex-end; }
+    .size-row .field { flex: 1; }
+    .size-toggle-btn { padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; font-size: .78rem; font-weight: 700; color: var(--muted); white-space: nowrap; transition: all .15s; letter-spacing: .03em; margin-bottom: 14px; }
+    .size-toggle-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--tag-bg); }
+
+    /* ── NEW BRAND MODAL ── */
+    .nb-note { font-size: .8rem; color: var(--muted); background: #fef9c3; border: 1px solid #fde047; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; line-height: 1.5; }
+    .nb-logo-preview { width: 60px; height: 60px; object-fit: contain; border: 1.5px solid var(--border); border-radius: 8px; padding: 4px; display: block; margin-top: 8px; }
+    .nb-logo-preview.hidden { display: none; }
+
+    /* ── ADMIN PANEL ── */
+    #adminScreen { padding: 24px; }
+    .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .admin-header h2 { font-size: 1.1rem; font-weight: 700; }
+    .admin-section { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+    .admin-section-title { padding: 14px 18px; border-bottom: 1px solid var(--border); font-size: .85rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .admin-brand-row { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+    .admin-brand-row:last-child { border-bottom: none; }
+    .admin-logo-box { width: 44px; height: 44px; border: 1.5px solid var(--border); border-radius: 8px; padding: 4px; object-fit: contain; background: #fff; flex-shrink: 0; }
+    .admin-logo-fallback { width: 44px; height: 44px; border-radius: 8px; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; flex-shrink: 0; }
+    .admin-brand-info { flex: 1; }
+    .admin-brand-name { font-weight: 600; font-size: .95rem; }
+    .admin-brand-sub { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+    .status-badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: .72rem; font-weight: 700; }
+    .status-pending  { background: #fef3c7; color: #92400e; }
+    .status-approved { background: #d1fae5; color: #065f46; }
+    .admin-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .admin-empty { padding: 32px; text-align: center; color: var(--muted); font-size: .9rem; }
   </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════
+<!-- ══════════════════════════════════════════════
      AUTH SCREEN
-════════════════════════════════════════ -->
+══════════════════════════════════════════════ -->
 <div id="authScreen">
   <div class="auth-card">
     <div class="auth-logo">
@@ -331,21 +194,20 @@
       <p>Track your sizes across every brand</p>
     </div>
 
-    <!-- Config missing warning — hidden once config is filled -->
     <div class="setup-banner hidden" id="setupBanner">
       <strong>⚙️ Firebase setup required</strong>
       <ol>
         <li>Go to <strong>console.firebase.google.com</strong> → New project</li>
         <li>Authentication → Sign-in method → Enable <strong>Email/Password</strong></li>
-        <li>Firestore Database → Create database (start in <strong>production mode</strong>)</li>
+        <li>Firestore Database → Create database (production mode)</li>
         <li>Project settings → Your apps → Web app → Copy config</li>
-        <li>Replace <code>REPLACE_WITH_YOUR_*</code> values at the top of this file's <code>&lt;script&gt;</code></li>
+        <li>Replace the config values in this file's &lt;script&gt;</li>
       </ol>
     </div>
 
     <div class="auth-tabs">
       <button class="auth-tab active" id="tabSignIn">Sign In</button>
-      <button class="auth-tab"        id="tabRegister">Create Account</button>
+      <button class="auth-tab" id="tabRegister">Create Account</button>
     </div>
 
     <div id="authError" class="auth-error hidden"></div>
@@ -361,9 +223,7 @@
 
     <button class="auth-btn" id="authSubmitBtn">Sign In</button>
 
-    <div class="auth-divider">
-      <span>or</span>
-    </div>
+    <div class="auth-divider"><span>or</span></div>
 
     <button class="auth-btn-google" id="btnGoogleSignIn">
       <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
@@ -372,11 +232,10 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
+<!-- ══════════════════════════════════════════════
      MAIN APP SCREEN
-════════════════════════════════════════ -->
+══════════════════════════════════════════════ -->
 <div id="appScreen" class="hidden">
-
   <header>
     <h1>My <span>Clothing</span> Sizes</h1>
     <div class="header-right">
@@ -384,6 +243,7 @@
         <div class="user-avatar" id="userAvatar">?</div>
         <span id="userEmail">—</span>
       </div>
+      <button class="btn btn-admin hidden" id="btnAdminPanel">Admin</button>
       <button class="btn btn-logout" id="btnLogout">Sign out</button>
       <button class="btn btn-primary" id="btnAddHeader">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -411,17 +271,35 @@
     <button class="btn btn-primary" id="btnAddEmpty">Add Size</button>
   </div>
 
-  <!-- Entry Modal -->
+  <!-- ── ENTRY MODAL ── -->
   <div class="overlay hidden" id="overlay">
     <div class="modal">
       <h2 id="modalTitle">Add Clothing Size</h2>
 
       <div class="form-row">
+        <!-- Brand custom select -->
         <div class="field">
           <label>Brand *</label>
-          <input id="fBrand" type="text" placeholder="e.g. Nike, Zara, Levi's" list="brandList" />
-          <datalist id="brandList"></datalist>
+          <div class="brand-select-wrap">
+            <button type="button" class="brand-trigger" id="brandTrigger">
+              <span class="bt-label" id="brandTriggerLabel">— select brand —</span>
+              <svg class="bt-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="brand-dropdown hidden" id="brandDropdown">
+              <div class="brand-search-box">
+                <input type="text" id="brandSearch" placeholder="Search brands…" autocomplete="off" />
+              </div>
+              <div id="brandList"></div>
+              <div class="brand-opt-add" id="brandOptAdd">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                New brand / Not listed…
+              </div>
+            </div>
+          </div>
+          <input type="hidden" id="fBrand" />
         </div>
+
+        <!-- Type -->
         <div class="field">
           <label>Type *</label>
           <select id="fType">
@@ -446,30 +324,19 @@
             <option>Swimwear</option>
             <option value="__other__">Other (custom)…</option>
           </select>
-          <input id="fTypeCustom" type="text" placeholder="Enter custom type" class="hidden" />
+          <input id="fTypeCustom" type="text" placeholder="Enter custom type" class="hidden" style="margin-top:8px;" />
         </div>
       </div>
 
-      <div class="form-row">
+      <!-- Size with toggle -->
+      <div class="size-row">
         <div class="field">
-          <label>Size / Label *</label>
-          <input id="fSize" type="text" placeholder="e.g. M, 32x30, 10.5, XL" />
-        </div>
-        <div class="field">
-          <label>Measurement System</label>
-          <select id="fSystem">
-            <option value="">— select —</option>
-            <option>US</option>
-            <option>EU</option>
-            <option>UK</option>
-            <option>International (S/M/L)</option>
-            <option>FR/IT</option>
-            <option>JP</option>
-            <option>CN</option>
-            <option>Brand-specific</option>
-            <option>Other</option>
+          <label>Size *</label>
+          <select id="fSize">
+            <option value="">— select size —</option>
           </select>
         </div>
+        <button type="button" class="size-toggle-btn" id="sizeToggleBtn" title="Toggle size type">ABC</button>
       </div>
 
       <div class="form-row">
@@ -502,16 +369,86 @@
     </div>
   </div>
 
+  <!-- ── NEW BRAND MODAL ── -->
+  <div class="overlay hidden" id="newBrandOverlay">
+    <div class="modal">
+      <h2>Add New Brand</h2>
+      <p class="nb-note">
+        This is a suggestion only. The administrator will decide the appropriate logo. Your entry will show a placeholder until the logo is approved.
+      </p>
+      <div class="field">
+        <label>Brand Name *</label>
+        <input id="nbName" type="text" placeholder="e.g. Acme Clothing" />
+      </div>
+      <div class="field">
+        <label>Logo (PNG, max 512 KB) — optional</label>
+        <input id="nbLogo" type="file" accept="image/png" />
+        <img id="nbLogoPreview" class="nb-logo-preview hidden" src="" alt="Logo preview" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="btnCancelNewBrand">Cancel</button>
+        <button class="btn btn-primary" id="btnSubmitNewBrand">Submit Brand</button>
+      </div>
+    </div>
+  </div>
+
 </div><!-- #appScreen -->
 
-<!-- ═══════════════════════════════════════
+<!-- ══════════════════════════════════════════════
+     ADMIN PANEL
+══════════════════════════════════════════════ -->
+<div id="adminScreen" class="hidden">
+  <header>
+    <h1>Admin <span>Panel</span></h1>
+    <div class="header-right">
+      <button class="btn btn-ghost" id="btnBackToApp">← Back to App</button>
+    </div>
+  </header>
+
+  <div id="adminContent" style="padding:24px;">
+    <div class="admin-section">
+      <div class="admin-section-title">Pending Logo Approvals</div>
+      <div id="adminPendingList"><div class="admin-empty">Loading…</div></div>
+    </div>
+    <div class="admin-section">
+      <div class="admin-section-title">All Brands</div>
+      <div id="adminAllBrands"><div class="admin-empty">Loading…</div></div>
+    </div>
+  </div>
+
+  <!-- Upload approved logo overlay -->
+  <div class="overlay hidden" id="adminUploadOverlay">
+    <div class="modal" style="max-width:400px;">
+      <h2 id="adminUploadTitle">Set Approved Logo</h2>
+      <div class="field">
+        <label>Upload Logo (PNG, max 512 KB)</label>
+        <input id="adminLogoFile" type="file" accept="image/png" />
+        <img id="adminLogoPreview" class="nb-logo-preview hidden" src="" alt="Preview" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="btnCancelAdminUpload">Cancel</button>
+        <button class="btn btn-primary" id="btnConfirmAdminUpload">Approve &amp; Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
      FIREBASE + APP LOGIC
-════════════════════════════════════════ -->
+══════════════════════════════════════════════ -->
 <script type="module">
-// ┌─────────────────────────────────────────────────────────┐
-// │  STEP 1 — Replace these values with your Firebase config │
-// │  (Project settings → Your apps → Web app → Config)      │
-// └─────────────────────────────────────────────────────────┘
+import { initializeApp }   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+         signOut, onAuthStateChanged, GoogleAuthProvider,
+         signInWithPopup, signInWithRedirect, getRedirectResult }
+  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getFirestore, collection, getDocs, addDoc, updateDoc,
+         deleteDoc, doc, setDoc, getDoc, query, orderBy }
+  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { getStorage, ref, uploadBytes, getDownloadURL }
+  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
+
+// ── Config ───────────────────────────────────
 const firebaseConfig = {
   apiKey:            "AIzaSyClCDoqW_8JCb_ARxDhbCSwyS6D49SgAIo",
   authDomain:        "clothing-sizes.firebaseapp.com",
@@ -521,48 +458,88 @@ const firebaseConfig = {
   appId:             "1:67596841716:web:90af8fea59b2ee562124a1"
 };
 
-// ┌─────────────────────────────────────────────────────────┐
-// │  STEP 2 — Firestore security rules (paste in Firebase)   │
-// │                                                          │
-// │  rules_version = '2';                                    │
-// │  service cloud.firestore {                               │
-// │    match /databases/{database}/documents {               │
-// │      match /users/{uid}/sizes/{id} {                     │
-// │        allow read, write: if request.auth.uid == uid;    │
-// │      }                                                   │
-// │    }                                                     │
-// │  }                                                       │
-// └─────────────────────────────────────────────────────────┘
+const ADMIN_UID = 'fmBUAvVTYqfbTDvp7Eh8ZBW5LR53';
 
-import { initializeApp }                                from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword,
-         signInWithEmailAndPassword, signOut,
-         onAuthStateChanged, GoogleAuthProvider,
-         signInWithPopup, signInWithRedirect, getRedirectResult } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import { getFirestore, collection, getDocs,
-         addDoc, updateDoc, deleteDoc, doc }            from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+// ── Preset brands (seeded into Firestore on first admin load) ─
+const PRESET_BRANDS = [
+  // Mass market
+  { name: 'Uniqlo',          domain: 'uniqlo.com' },
+  { name: 'Zara',            domain: 'zara.com' },
+  { name: 'H&M',             domain: 'hm.com' },
+  { name: 'Cotton On',       domain: 'cottonon.com' },
+  { name: 'Giordano',        domain: 'giordano.com' },
+  { name: 'Marks & Spencer', domain: 'marksandspencer.com' },
+  { name: 'Esprit',          domain: 'esprit.com' },
+  { name: 'Forever 21',      domain: 'forever21.com' },
+  { name: 'Old Navy',        domain: 'oldnavy.com' },
+  { name: 'Primark',         domain: 'primark.com' },
+  { name: 'Bossini',         domain: 'bossini.com' },
+  { name: 'G2000',           domain: 'g2000.com' },
+  { name: 'Gap',             domain: 'gap.com' },
+  { name: 'Pull & Bear',     domain: 'pullandbear.com' },
+  { name: 'Bershka',         domain: 'bershka.com' },
+  { name: 'Stradivarius',    domain: 'stradivarius.com' },
+  // Mid-range
+  { name: 'Mango',           domain: 'mango.com' },
+  { name: 'Massimo Dutti',   domain: 'massimodutti.com' },
+  { name: 'COS',             domain: 'cosstores.com' },
+  { name: '& Other Stories', domain: 'stories.com' },
+  { name: 'Muji',            domain: 'muji.com' },
+  { name: 'Banana Republic', domain: 'bananarepublic.com' },
+  { name: "J.Crew",          domain: 'jcrew.com' },
+  { name: 'Ralph Lauren',    domain: 'ralphlauren.com' },
+  { name: 'Tommy Hilfiger',  domain: 'tommy.com' },
+  { name: 'Calvin Klein',    domain: 'calvinklein.com' },
+  // Sport
+  { name: 'Nike',            domain: 'nike.com' },
+  { name: 'Adidas',          domain: 'adidas.com' },
+  { name: 'Puma',            domain: 'puma.com' },
+  { name: 'New Balance',     domain: 'newbalance.com' },
+  { name: 'Under Armour',    domain: 'underarmour.com' },
+  { name: 'Lululemon',       domain: 'lululemon.com' },
+  { name: 'The North Face',  domain: 'thenorthface.com' },
+  { name: 'Patagonia',       domain: 'patagonia.com' },
+  { name: 'Carhartt',        domain: 'carhartt.com' },
+  // Denim
+  { name: "Levi's",          domain: 'levi.com' },
+  // Premium
+  { name: 'Acne Studios',    domain: 'acnestudios.com' },
+  { name: 'Stone Island',    domain: 'stoneisland.com' },
+  { name: 'A.P.C.',          domain: 'apc.fr' },
+  { name: 'Supreme',         domain: 'supremenewyork.com' },
+];
 
-// ── Detect unconfigured state ────────────────────────────
+const LETTER_SIZES = ['XS','S','M','L','XL','XXL','XXXL'];
+const NUMBER_SIZES = ['26','27','28','29','30','31','32','33','34','36','38','40','42'];
+const PRESET_TYPES = [
+  'T-Shirt','Shirt / Button-up','Sweater / Hoodie','Jacket / Coat',
+  'Suit / Blazer','Dress','Pants / Trousers','Jeans','Shorts','Skirt',
+  'Shoes / Sneakers','Boots','Sandals','Socks','Underwear',
+  'Hat / Cap','Belt','Swimwear'
+];
+
+// ── Firebase init ────────────────────────────
 const isConfigured = !firebaseConfig.apiKey.startsWith('REPLACE');
-if (!isConfigured) {
-  document.getElementById('setupBanner').classList.remove('hidden');
-}
+if (!isConfigured) document.getElementById('setupBanner').classList.remove('hidden');
 
-// ── Firebase init ────────────────────────────────────────
-const app  = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db   = getFirestore(app);
+const app     = initializeApp(firebaseConfig);
+const auth    = getAuth(app);
+const db      = getFirestore(app);
+const storage = getStorage(app);
 
-// ── State ────────────────────────────────────────────────
-let currentUser = null;
-let entries     = [];
-let editId      = null;
+// ── State ────────────────────────────────────
+let currentUser  = null;
+let entries      = [];
+let editId       = null;
+let brands       = [];           // { id, name, logoUrl, status, suggestedLogoUrl }
+let selectedBrand = null;        // { id, name, logoUrl }
+let sizeMode     = 'letter';     // 'letter' | 'number'
+let adminBrandId = null;         // brand being edited in admin upload overlay
 
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 //  AUTH
-// ════════════════════════════════════════════════════════
-let authMode = 'signin'; // 'signin' | 'register'
-
+// ══════════════════════════════════════════════
+let authMode = 'signin';
 const tabSignIn   = document.getElementById('tabSignIn');
 const tabRegister = document.getElementById('tabRegister');
 const authBtn     = document.getElementById('authSubmitBtn');
@@ -574,37 +551,29 @@ function setAuthMode(mode) {
     tabSignIn.classList.add('active');
     tabRegister.classList.remove('active');
     authBtn.textContent = 'Sign In';
-    document.querySelector('.auth-field:last-of-type label').textContent = 'Password';
     document.getElementById('aPassword').autocomplete = 'current-password';
   } else {
     tabRegister.classList.add('active');
     tabSignIn.classList.remove('active');
     authBtn.textContent = 'Create Account';
-    document.querySelector('.auth-field:last-of-type label').textContent = 'Password (min 6 chars)';
     document.getElementById('aPassword').autocomplete = 'new-password';
   }
   hideAuthError();
 }
-
-function showAuthError(msg) {
-  authError.textContent = msg;
-  authError.classList.remove('hidden');
-}
-function hideAuthError() {
-  authError.classList.add('hidden');
-}
+function showAuthError(msg) { authError.textContent = msg; authError.classList.remove('hidden'); }
+function hideAuthError()    { authError.classList.add('hidden'); }
 
 function friendlyAuthError(code) {
   const map = {
-    'auth/invalid-email':            'Please enter a valid email address.',
-    'auth/user-not-found':           'No account found with that email.',
-    'auth/wrong-password':           'Incorrect password. Please try again.',
-    'auth/invalid-credential':       'Incorrect email or password.',
-    'auth/email-already-in-use':     'An account with this email already exists.',
-    'auth/weak-password':            'Password must be at least 6 characters.',
-    'auth/too-many-requests':        'Too many attempts. Please wait a moment and try again.',
-    'auth/network-request-failed':   'Network error. Check your connection.',
-    'auth/api-key-not-valid':        'Firebase API key is not configured. See setup instructions above.',
+    'auth/invalid-email':          'Please enter a valid email address.',
+    'auth/user-not-found':         'No account found with that email.',
+    'auth/wrong-password':         'Incorrect password.',
+    'auth/invalid-credential':     'Incorrect email or password.',
+    'auth/email-already-in-use':   'An account with this email already exists.',
+    'auth/weak-password':          'Password must be at least 6 characters.',
+    'auth/too-many-requests':      'Too many attempts. Please wait and try again.',
+    'auth/network-request-failed': 'Network error. Check your connection.',
+    'auth/api-key-not-valid':      'Firebase API key invalid.',
   };
   return map[code] || 'Something went wrong. Please try again.';
 }
@@ -616,17 +585,12 @@ authBtn.addEventListener('click', async () => {
   const email    = document.getElementById('aEmail').value.trim();
   const password = document.getElementById('aPassword').value;
   if (!email || !password) { showAuthError('Please enter your email and password.'); return; }
-
   authBtn.disabled = true;
   authBtn.innerHTML = '<span class="spinner"></span>';
   hideAuthError();
-
   try {
-    if (authMode === 'signin') {
-      await signInWithEmailAndPassword(auth, email, password);
-    } else {
-      await createUserWithEmailAndPassword(auth, email, password);
-    }
+    if (authMode === 'signin') await signInWithEmailAndPassword(auth, email, password);
+    else                       await createUserWithEmailAndPassword(auth, email, password);
   } catch (err) {
     showAuthError(friendlyAuthError(err.code));
     authBtn.disabled = false;
@@ -643,19 +607,11 @@ document.getElementById('btnGoogleSignIn').addEventListener('click', async () =>
   hideAuthError();
   const provider = new GoogleAuthProvider();
   try {
-    // Try popup first (works on HTTPS, no third-party cookie issues)
     await signInWithPopup(auth, provider);
-    // onAuthStateChanged will handle the rest
   } catch (err) {
     if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-cancelled-by-user') {
-      // Fallback to redirect if popup was blocked
-      try {
-        await signInWithRedirect(auth, provider);
-      } catch (redirectErr) {
-        showAuthError(friendlyAuthError(redirectErr.code));
-        btn.disabled = false;
-        btn.innerHTML = googleSVG;
-      }
+      try { await signInWithRedirect(auth, provider); }
+      catch (e2) { showAuthError(friendlyAuthError(e2.code)); btn.disabled = false; btn.innerHTML = googleSVG; }
     } else {
       showAuthError(friendlyAuthError(err.code));
       btn.disabled = false;
@@ -664,81 +620,395 @@ document.getElementById('btnGoogleSignIn').addEventListener('click', async () =>
   }
 });
 
-// submit on Enter key in auth fields
 ['aEmail','aPassword'].forEach(id => {
-  document.getElementById(id).addEventListener('keydown', e => {
-    if (e.key === 'Enter') authBtn.click();
-  });
+  document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') authBtn.click(); });
 });
 
 document.getElementById('btnLogout').addEventListener('click', () => signOut(auth));
 
-// ── Handle Google redirect result on page load ────────────
 getRedirectResult(auth).catch(err => {
-  if (err && err.code && err.code !== 'auth/no-current-user') {
-    showAuthError(friendlyAuthError(err.code));
-  }
+  if (err && err.code && err.code !== 'auth/no-current-user') showAuthError(friendlyAuthError(err.code));
 });
 
-// ── Auth state listener ──────────────────────────────────
 onAuthStateChanged(auth, async user => {
   if (user) {
     currentUser = user;
-    // show app
     document.getElementById('authScreen').classList.add('hidden');
+    document.getElementById('adminScreen').classList.add('hidden');
     document.getElementById('appScreen').classList.remove('hidden');
-    // populate user chip
     const displayName = user.displayName || user.email || 'User';
     document.getElementById('userEmail').textContent = displayName;
     document.getElementById('userAvatar').textContent = displayName[0].toUpperCase();
-    // load data
+    // Show admin button for admin
+    document.getElementById('btnAdminPanel').classList.toggle('hidden', user.uid !== ADMIN_UID);
+    // Seed brands if admin and not seeded yet
+    await loadBrands();
+    if (user.uid === ADMIN_UID) await seedBrandsIfNeeded();
+    else await loadBrands(); // reload after potential seed
     await loadEntries();
     render();
   } else {
     currentUser = null;
     entries = [];
+    brands = [];
     document.getElementById('appScreen').classList.add('hidden');
+    document.getElementById('adminScreen').classList.add('hidden');
     document.getElementById('authScreen').classList.remove('hidden');
     authBtn.disabled = false;
     authBtn.textContent = authMode === 'signin' ? 'Sign In' : 'Create Account';
-    // Reset Google button in case it was mid-sign-in
     const gBtn = document.getElementById('btnGoogleSignIn');
     gBtn.disabled = false;
     gBtn.innerHTML = googleSVG;
   }
 });
 
-// ════════════════════════════════════════════════════════
-//  FIRESTORE CRUD
-// ════════════════════════════════════════════════════════
-function sizesRef() {
-  return collection(db, 'users', currentUser.uid, 'sizes');
+// ══════════════════════════════════════════════
+//  BRANDS
+// ══════════════════════════════════════════════
+function clearbitLogo(domain) {
+  return `https://logo.clearbit.com/${domain}`;
 }
+
+async function loadBrands() {
+  try {
+    const snap = await getDocs(query(collection(db, 'brands'), orderBy('name')));
+    brands = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (e) {
+    brands = [];
+  }
+}
+
+async function seedBrandsIfNeeded() {
+  if (brands.length > 0) return; // already seeded
+  const batch = [];
+  for (const b of PRESET_BRANDS) {
+    const id = b.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    batch.push(setDoc(doc(db, 'brands', id), {
+      name:             b.name,
+      logoUrl:          clearbitLogo(b.domain),
+      status:           'approved',
+      isPreset:         true,
+      suggestedLogoUrl: null,
+      submittedBy:      null,
+    }));
+  }
+  await Promise.all(batch);
+  await loadBrands();
+}
+
+// ══════════════════════════════════════════════
+//  BRAND DROPDOWN COMPONENT
+// ══════════════════════════════════════════════
+function buildBrandDropdown(filter = '') {
+  const list = document.getElementById('brandList');
+  const filtered = filter
+    ? brands.filter(b => b.name.toLowerCase().includes(filter.toLowerCase()))
+    : brands;
+
+  list.innerHTML = '';
+  filtered.forEach(b => {
+    const opt = document.createElement('div');
+    opt.className = 'brand-opt' + (selectedBrand && selectedBrand.id === b.id ? ' selected' : '');
+    opt.dataset.id = b.id;
+
+    const logoUrl = b.status === 'approved' ? b.logoUrl : null;
+    const logoHtml = logoUrl
+      ? `<img src="${logoUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><span class="brand-opt-fallback" style="display:none;">${b.name[0]}</span>`
+      : `<span class="brand-opt-fallback">${b.name[0]}</span>`;
+
+    const pendingBadge = b.status === 'pending'
+      ? `<span class="brand-pending-badge">Pending logo</span>` : '';
+
+    opt.innerHTML = logoHtml + `<span>${esc(b.name)}</span>` + pendingBadge;
+    opt.addEventListener('click', () => selectBrand(b));
+    list.appendChild(opt);
+  });
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div style="padding:12px 14px;font-size:.85rem;color:var(--muted);">No brands found</div>';
+  }
+}
+
+function selectBrand(b) {
+  selectedBrand = b;
+  document.getElementById('fBrand').value = b.name;
+  // Update trigger
+  const logoUrl = b.status === 'approved' ? b.logoUrl : null;
+  const imgHtml = logoUrl
+    ? `<img class="bt-logo" src="${logoUrl}" alt="" onerror="this.style.display='none'" />`
+    : `<span class="brand-opt-fallback" style="display:inline-flex;width:22px;height:22px;font-size:.65rem;border-radius:3px;">${b.name[0]}</span>`;
+  document.getElementById('brandTriggerLabel').innerHTML = imgHtml + esc(b.name);
+  closeBrandDropdown();
+}
+
+function openBrandDropdown() {
+  document.getElementById('brandDropdown').classList.remove('hidden');
+  document.getElementById('brandTrigger').classList.add('open');
+  document.getElementById('brandSearch').value = '';
+  buildBrandDropdown();
+  document.getElementById('brandSearch').focus();
+}
+
+function closeBrandDropdown() {
+  document.getElementById('brandDropdown').classList.add('hidden');
+  document.getElementById('brandTrigger').classList.remove('open');
+}
+
+document.getElementById('brandTrigger').addEventListener('click', e => {
+  e.stopPropagation();
+  const dd = document.getElementById('brandDropdown');
+  if (dd.classList.contains('hidden')) openBrandDropdown();
+  else closeBrandDropdown();
+});
+
+document.getElementById('brandSearch').addEventListener('input', function() {
+  buildBrandDropdown(this.value);
+});
+
+document.getElementById('brandOptAdd').addEventListener('click', () => {
+  closeBrandDropdown();
+  openNewBrandModal();
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.brand-select-wrap')) closeBrandDropdown();
+});
+
+// ══════════════════════════════════════════════
+//  SIZE TOGGLE
+// ══════════════════════════════════════════════
+function populateSizeDropdown(currentValue = '') {
+  const sel = document.getElementById('fSize');
+  const sizes = sizeMode === 'letter' ? LETTER_SIZES : NUMBER_SIZES;
+  sel.innerHTML = '<option value="">— select size —</option>' +
+    sizes.map(s => `<option value="${s}"${s === currentValue ? ' selected' : ''}>${s}</option>`).join('');
+  document.getElementById('sizeToggleBtn').textContent = sizeMode === 'letter' ? '123' : 'ABC';
+  document.getElementById('sizeToggleBtn').title = sizeMode === 'letter'
+    ? 'Switch to numeric sizes' : 'Switch to letter sizes';
+}
+
+document.getElementById('sizeToggleBtn').addEventListener('click', () => {
+  sizeMode = sizeMode === 'letter' ? 'number' : 'letter';
+  populateSizeDropdown();
+});
+
+// ══════════════════════════════════════════════
+//  NEW BRAND MODAL
+// ══════════════════════════════════════════════
+function openNewBrandModal() {
+  document.getElementById('nbName').value = '';
+  document.getElementById('nbLogo').value = '';
+  document.getElementById('nbLogoPreview').classList.add('hidden');
+  document.getElementById('newBrandOverlay').classList.remove('hidden');
+  document.getElementById('nbName').focus();
+}
+function closeNewBrandModal() {
+  document.getElementById('newBrandOverlay').classList.add('hidden');
+}
+
+document.getElementById('nbLogo').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  const preview = document.getElementById('nbLogoPreview');
+  preview.src = URL.createObjectURL(file);
+  preview.classList.remove('hidden');
+});
+
+document.getElementById('btnCancelNewBrand').addEventListener('click', closeNewBrandModal);
+
+document.getElementById('btnSubmitNewBrand').addEventListener('click', async () => {
+  const name = document.getElementById('nbName').value.trim();
+  if (!name) { alert('Please enter a brand name.'); return; }
+
+  const file = document.getElementById('nbLogo').files[0];
+  if (file && file.size > 512 * 1024) { alert('Logo must be under 512 KB.'); return; }
+
+  const btn = document.getElementById('btnSubmitNewBrand');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Submitting…';
+
+  try {
+    const id = name.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now();
+    let suggestedLogoUrl = null;
+
+    if (file) {
+      const storageRef = ref(storage, `brand-logos/suggestions/${id}.png`);
+      await uploadBytes(storageRef, file, { contentType: 'image/png' });
+      suggestedLogoUrl = await getDownloadURL(storageRef);
+    }
+
+    await setDoc(doc(db, 'brands', id), {
+      name,
+      logoUrl:          null,  // no approved logo yet
+      status:           'pending',
+      isPreset:         false,
+      suggestedLogoUrl,
+      submittedBy:      currentUser.uid,
+    });
+
+    await loadBrands();
+    const newBrand = brands.find(b => b.id === id);
+    if (newBrand) selectBrand(newBrand);
+
+    closeNewBrandModal();
+    alert(`"${name}" has been submitted! The logo will be reviewed by the administrator.`);
+  } catch (err) {
+    alert('Failed to submit: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Submit Brand';
+  }
+});
+
+// ══════════════════════════════════════════════
+//  ADMIN PANEL
+// ══════════════════════════════════════════════
+document.getElementById('btnAdminPanel').addEventListener('click', () => {
+  document.getElementById('appScreen').classList.add('hidden');
+  document.getElementById('adminScreen').classList.remove('hidden');
+  renderAdminPanel();
+});
+
+document.getElementById('btnBackToApp').addEventListener('click', () => {
+  document.getElementById('adminScreen').classList.add('hidden');
+  document.getElementById('appScreen').classList.remove('hidden');
+});
+
+async function renderAdminPanel() {
+  await loadBrands();
+
+  const pending  = brands.filter(b => b.status === 'pending' || b.suggestedLogoUrl);
+  const allBrands = [...brands].sort((a, b) => a.name.localeCompare(b.name));
+
+  // Pending
+  const pendingEl = document.getElementById('adminPendingList');
+  if (pending.length === 0) {
+    pendingEl.innerHTML = '<div class="admin-empty">No pending approvals 🎉</div>';
+  } else {
+    pendingEl.innerHTML = '';
+    pending.forEach(b => pendingEl.appendChild(makeAdminRow(b, true)));
+  }
+
+  // All brands
+  const allEl = document.getElementById('adminAllBrands');
+  allEl.innerHTML = '';
+  allBrands.forEach(b => allEl.appendChild(makeAdminRow(b, false)));
+}
+
+function makeAdminRow(b, showSuggestion) {
+  const row = document.createElement('div');
+  row.className = 'admin-brand-row';
+  row.id = 'admin-row-' + b.id;
+
+  const logoUrl = b.logoUrl || b.suggestedLogoUrl;
+  const logoHtml = logoUrl
+    ? `<img class="admin-logo-box" src="${logoUrl}" alt="" onerror="this.parentElement.innerHTML='<div class=admin-logo-fallback>${b.name[0]}</div>'" />`
+    : `<div class="admin-logo-fallback">${b.name[0]}</div>`;
+
+  const badge = b.status === 'approved'
+    ? `<span class="status-badge status-approved">Approved</span>`
+    : `<span class="status-badge status-pending">Pending</span>`;
+
+  const suggestionNote = showSuggestion && b.suggestedLogoUrl
+    ? `<div style="font-size:.75rem;color:var(--muted);margin-top:3px;">User submitted a logo suggestion</div>` : '';
+
+  row.innerHTML = logoHtml +
+    `<div class="admin-brand-info">
+      <div class="admin-brand-name">${esc(b.name)} ${badge}</div>
+      ${suggestionNote}
+    </div>` +
+    `<div class="admin-actions">
+      <button class="btn btn-ghost" style="font-size:.8rem;padding:6px 12px;" data-admin-action="upload" data-id="${b.id}">Set Logo</button>
+      ${b.status === 'pending' ? `<button class="btn btn-primary" style="font-size:.8rem;padding:6px 12px;" data-admin-action="approve" data-id="${b.id}">Approve</button>` : ''}
+      ${!b.isPreset ? `<button class="btn btn-danger" style="font-size:.8rem;padding:6px 12px;" data-admin-action="delete" data-id="${b.id}">Delete</button>` : ''}
+    </div>`;
+
+  return row;
+}
+
+document.getElementById('adminContent').addEventListener('click', async e => {
+  const btn = e.target.closest('[data-admin-action]');
+  if (!btn) return;
+  const action = btn.dataset.adminAction;
+  const id     = btn.dataset.id;
+  const brand  = brands.find(b => b.id === id);
+  if (!brand) return;
+
+  if (action === 'approve') {
+    await updateDoc(doc(db, 'brands', id), { status: 'approved', logoUrl: brand.suggestedLogoUrl || brand.logoUrl });
+    await renderAdminPanel();
+  }
+
+  if (action === 'delete') {
+    if (!confirm(`Delete brand "${brand.name}"? This cannot be undone.`)) return;
+    await deleteDoc(doc(db, 'brands', id));
+    await loadBrands();
+    await renderAdminPanel();
+  }
+
+  if (action === 'upload') {
+    adminBrandId = id;
+    document.getElementById('adminUploadTitle').textContent = `Set Logo — ${brand.name}`;
+    document.getElementById('adminLogoFile').value = '';
+    document.getElementById('adminLogoPreview').classList.add('hidden');
+    document.getElementById('adminUploadOverlay').classList.remove('hidden');
+  }
+});
+
+document.getElementById('adminLogoFile').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  const preview = document.getElementById('adminLogoPreview');
+  preview.src = URL.createObjectURL(file);
+  preview.classList.remove('hidden');
+});
+
+document.getElementById('btnCancelAdminUpload').addEventListener('click', () => {
+  document.getElementById('adminUploadOverlay').classList.add('hidden');
+});
+
+document.getElementById('btnConfirmAdminUpload').addEventListener('click', async () => {
+  const file = document.getElementById('adminLogoFile').files[0];
+  if (!file) { alert('Please select a PNG file.'); return; }
+  if (file.size > 512 * 1024) { alert('Logo must be under 512 KB.'); return; }
+
+  const btn = document.getElementById('btnConfirmAdminUpload');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Uploading…';
+
+  try {
+    const storageRef = ref(storage, `brand-logos/approved/${adminBrandId}.png`);
+    await uploadBytes(storageRef, file, { contentType: 'image/png' });
+    const url = await getDownloadURL(storageRef);
+    await updateDoc(doc(db, 'brands', adminBrandId), { logoUrl: url, status: 'approved' });
+    await loadBrands();
+    document.getElementById('adminUploadOverlay').classList.add('hidden');
+    await renderAdminPanel();
+  } catch (err) {
+    alert('Upload failed: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Approve & Save';
+  }
+});
+
+// ══════════════════════════════════════════════
+//  FIRESTORE CRUD (user sizes)
+// ══════════════════════════════════════════════
+function sizesRef() { return collection(db, 'users', currentUser.uid, 'sizes'); }
 
 async function loadEntries() {
   const snap = await getDocs(sizesRef());
   entries = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
-async function addEntry(data) {
-  const ref = await addDoc(sizesRef(), data);
-  entries.push({ id: ref.id, ...data });
-}
+async function addEntry(data)          { const r = await addDoc(sizesRef(), data); entries.push({ id: r.id, ...data }); }
+async function updateEntry(id, data)   { await updateDoc(doc(db,'users',currentUser.uid,'sizes',id), data); const i = entries.findIndex(e=>e.id===id); if(i!==-1) entries[i]={id,...data}; }
+async function removeEntry(id)         { await deleteDoc(doc(db,'users',currentUser.uid,'sizes',id)); entries = entries.filter(e=>e.id!==id); }
 
-async function updateEntry(id, data) {
-  await updateDoc(doc(db, 'users', currentUser.uid, 'sizes', id), data);
-  const idx = entries.findIndex(e => e.id === id);
-  if (idx !== -1) entries[idx] = { id, ...data };
-}
-
-async function removeEntry(id) {
-  await deleteDoc(doc(db, 'users', currentUser.uid, 'sizes', id));
-  entries = entries.filter(e => e.id !== id);
-}
-
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 //  RENDER
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 function esc(str) {
   return String(str == null ? '' : str)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -750,7 +1020,7 @@ function render() {
   const brandF = document.getElementById('filterBrand').value;
 
   const filtered = entries.filter(e => {
-    const matchQ     = !q || e.brand.toLowerCase().includes(q) || e.type.toLowerCase().includes(q);
+    const matchQ     = !q || (e.brand||'').toLowerCase().includes(q) || (e.type||'').toLowerCase().includes(q);
     const matchType  = !typeF  || e.type  === typeF;
     const matchBrand = !brandF || e.brand === brandF;
     return matchQ && matchType && matchBrand;
@@ -758,7 +1028,6 @@ function render() {
 
   const grid  = document.getElementById('grid');
   const empty = document.getElementById('empty');
-
   grid.innerHTML = '';
 
   if (filtered.length === 0) {
@@ -773,144 +1042,141 @@ function render() {
     empty.classList.add('hidden');
     filtered.forEach(e => grid.appendChild(makeCard(e)));
   }
-
   updateFilters();
+}
+
+function getBrandLogoUrl(brandName) {
+  const b = brands.find(x => x.name === brandName);
+  return b && b.status === 'approved' ? b.logoUrl : null;
 }
 
 function makeCard(e) {
   const card = document.createElement('div');
   card.className = 'card';
+
+  const logoUrl   = getBrandLogoUrl(e.brand);
+  const logoHtml  = logoUrl
+    ? `<img class="card-brand-logo" src="${logoUrl}" alt="" onerror="this.style.display='none'" />`
+    : `<div class="card-brand-logo-fallback">${(e.brand||'?')[0].toUpperCase()}</div>`;
+
   const measurements = [];
-  if (e.chest)  measurements.push('Chest/W: ' + e.chest + ' cm');
-  if (e.waist)  measurements.push('Waist: '   + e.waist + ' cm');
-  if (e.length) measurements.push('Length: '  + e.length + ' cm');
+  if (e.chest)  measurements.push('Chest: '  + e.chest  + ' cm');
+  if (e.waist)  measurements.push('Waist: '  + e.waist  + ' cm');
+  if (e.length) measurements.push('Length: ' + e.length + ' cm');
 
   card.innerHTML =
-    '<div class="card-header">' +
-      '<div class="card-brand">' + esc(e.brand) + '</div>' +
-      '<div class="card-actions">' +
-        '<button class="icon-btn edit" data-id="' + e.id + '" data-action="edit" title="Edit">' +
-          '<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">' +
-            '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>' +
-            '<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>' +
-          '</svg>' +
-        '</button>' +
-        '<button class="icon-btn del" data-id="' + e.id + '" data-action="delete" title="Delete">' +
-          '<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">' +
-            '<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>' +
-            '<path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>' +
-          '</svg>' +
-        '</button>' +
-      '</div>' +
-    '</div>' +
-    '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">' +
-      '<span class="tag">' + esc(e.type) + '</span>' +
-      (e.system ? '<span style="font-size:.75rem;color:var(--muted)">' + esc(e.system) + '</span>' : '') +
-    '</div>' +
-    '<div class="size-display">' + esc(e.size) + '</div>' +
-    (measurements.length ? '<div class="card-meta">' + measurements.map(m => '<span>' + m + '</span>').join('') + '</div>' : '') +
-    (e.notes ? '<div class="notes">' + esc(e.notes) + '</div>' : '');
+    `<div class="card-header">
+      <div class="card-brand-row">${logoHtml}<div class="card-brand">${esc(e.brand)}</div></div>
+      <div class="card-actions">
+        <button class="icon-btn edit" data-id="${e.id}" data-action="edit" title="Edit">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="icon-btn del" data-id="${e.id}" data-action="delete" title="Delete">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        </button>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <span class="tag">${esc(e.type)}</span>
+    </div>
+    <div class="size-display">${esc(e.size)}</div>
+    ${measurements.length ? `<div class="card-meta">${measurements.map(m=>`<span>${m}</span>`).join('')}</div>` : ''}
+    ${e.notes ? `<div class="notes">${esc(e.notes)}</div>` : ''}`;
 
   return card;
 }
 
 function updateFilters() {
-  const brands = [...new Set(entries.map(e => e.brand))].sort();
   const types  = [...new Set(entries.map(e => e.type))].sort();
-
+  const bnames = [...new Set(entries.map(e => e.brand))].sort();
   const tf = document.getElementById('filterType');
   const bf = document.getElementById('filterBrand');
   const curType  = tf.value;
   const curBrand = bf.value;
-
-  tf.innerHTML = '<option value="">All types</option>'  + types.map(t  => `<option${t===curType?' selected':''}>${esc(t)}</option>`).join('');
-  bf.innerHTML = '<option value="">All brands</option>' + brands.map(b => `<option${b===curBrand?' selected':''}>${esc(b)}</option>`).join('');
-  document.getElementById('brandList').innerHTML = brands.map(b => `<option value="${esc(b)}">`).join('');
+  tf.innerHTML = '<option value="">All types</option>'  + types.map(t=>`<option${t===curType?' selected':''}>${esc(t)}</option>`).join('');
+  bf.innerHTML = '<option value="">All brands</option>' + bnames.map(b=>`<option${b===curBrand?' selected':''}>${esc(b)}</option>`).join('');
 }
 
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 //  ENTRY MODAL
-// ════════════════════════════════════════════════════════
-const PRESET_TYPES = [
-  'T-Shirt','Shirt / Button-up','Sweater / Hoodie','Jacket / Coat',
-  'Suit / Blazer','Dress','Pants / Trousers','Jeans','Shorts','Skirt',
-  'Shoes / Sneakers','Boots','Sandals','Socks','Underwear',
-  'Hat / Cap','Belt','Swimwear'
-];
-
+// ══════════════════════════════════════════════
 function setTypeField(value) {
   const sel    = document.getElementById('fType');
   const custom = document.getElementById('fTypeCustom');
   if (PRESET_TYPES.includes(value) || value === '') {
-    sel.value = value;
-    custom.classList.add('hidden');
-    custom.value = '';
+    sel.value = value; custom.classList.add('hidden'); custom.value = '';
   } else {
-    sel.value = '__other__';
-    custom.classList.remove('hidden');
-    custom.value = value;
+    sel.value = '__other__'; custom.classList.remove('hidden'); custom.value = value;
   }
 }
 
 function getTypeValue() {
   const sel = document.getElementById('fType');
-  return sel.value === '__other__'
-    ? document.getElementById('fTypeCustom').value.trim()
-    : sel.value;
+  return sel.value === '__other__' ? document.getElementById('fTypeCustom').value.trim() : sel.value;
 }
 
 function openModal(id) {
   editId = id || null;
   document.getElementById('modalTitle').textContent = editId ? 'Edit Clothing Size' : 'Add Clothing Size';
+  sizeMode = 'letter';
 
   if (editId) {
     const e = entries.find(x => x.id === editId);
-    document.getElementById('fBrand').value  = e.brand;
+    // Set brand
+    const b = brands.find(x => x.name === e.brand);
+    if (b) selectBrand(b);
+    else {
+      selectedBrand = null;
+      document.getElementById('fBrand').value = e.brand;
+      document.getElementById('brandTriggerLabel').textContent = e.brand;
+    }
     setTypeField(e.type);
-    document.getElementById('fSize').value   = e.size;
-    document.getElementById('fSystem').value = e.system || '';
+    // Set size — detect mode
+    if (NUMBER_SIZES.includes(e.size)) sizeMode = 'number';
+    populateSizeDropdown(e.size);
     document.getElementById('fChest').value  = e.chest  || '';
     document.getElementById('fWaist').value  = e.waist  || '';
     document.getElementById('fLength').value = e.length || '';
     document.getElementById('fNotes').value  = e.notes  || '';
   } else {
-    ['fBrand','fSize','fChest','fWaist','fLength','fNotes'].forEach(id => { document.getElementById(id).value = ''; });
-    document.getElementById('fSystem').value = '';
+    selectedBrand = null;
+    document.getElementById('fBrand').value = '';
+    document.getElementById('brandTriggerLabel').innerHTML = '— select brand —';
     setTypeField('');
+    populateSizeDropdown();
+    ['fChest','fWaist','fLength','fNotes'].forEach(id => { document.getElementById(id).value = ''; });
   }
 
   document.getElementById('overlay').classList.remove('hidden');
-  document.getElementById('fBrand').focus();
 }
 
 function closeModal() {
   document.getElementById('overlay').classList.add('hidden');
   editId = null;
+  closeBrandDropdown();
 }
 
 async function saveEntry() {
   const brand  = document.getElementById('fBrand').value.trim();
   const type   = getTypeValue();
-  const size   = document.getElementById('fSize').value.trim();
-  const system = document.getElementById('fSystem').value;
+  const size   = document.getElementById('fSize').value;
   const chest  = document.getElementById('fChest').value.trim();
   const waist  = document.getElementById('fWaist').value.trim();
   const length = document.getElementById('fLength').value.trim();
   const notes  = document.getElementById('fNotes').value.trim();
 
-  if (!brand || !type || !size) { alert('Brand, Type, and Size are required.'); return; }
+  if (!brand) { alert('Please select a brand.'); return; }
+  if (!type)  { alert('Please select a type.');  return; }
+  if (!size)  { alert('Please select a size.');  return; }
 
   const saveBtn = document.getElementById('btnSave');
   saveBtn.disabled = true;
   saveBtn.innerHTML = '<span class="spinner"></span>';
 
   try {
-    const data = { brand, type, size, system, chest, waist, length, notes };
-    if (editId) {
-      await updateEntry(editId, data);
-    } else {
-      await addEntry(data);
-    }
+    const data = { brand, type, size, chest, waist, length, notes };
+    if (editId) await updateEntry(editId, data);
+    else        await addEntry(data);
     closeModal();
     render();
   } catch (err) {
@@ -923,19 +1189,14 @@ async function saveEntry() {
 
 async function deleteEntry(id) {
   const e = entries.find(x => x.id === id);
-  if (!e) return;
-  if (!confirm(`Delete "${e.brand} – ${e.type} (${e.size})"?`)) return;
-  try {
-    await removeEntry(id);
-    render();
-  } catch (err) {
-    alert('Failed to delete: ' + err.message);
-  }
+  if (!e || !confirm(`Delete "${e.brand} – ${e.type} (${e.size})"?`)) return;
+  try { await removeEntry(id); render(); }
+  catch (err) { alert('Failed to delete: ' + err.message); }
 }
 
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 //  EVENT LISTENERS
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 document.getElementById('btnAddHeader').addEventListener('click', () => openModal());
 document.getElementById('btnAddEmpty').addEventListener('click',  () => openModal());
 document.getElementById('btnCancel').addEventListener('click',    closeModal);
@@ -961,9 +1222,8 @@ document.getElementById('grid').addEventListener('click', e => {
 document.getElementById('overlay').addEventListener('click', e => {
   if (e.target === document.getElementById('overlay')) closeModal();
 });
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
+document.getElementById('newBrandOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('newBrandOverlay')) closeNewBrandModal();
 });
 </script>
 </body>
