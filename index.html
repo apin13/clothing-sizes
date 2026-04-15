@@ -515,8 +515,11 @@ const PRESET_BRANDS = [
   { name: 'Supreme',         domain: 'supremenewyork.com' },
 ];
 
-const LETTER_SIZES = ['XS','S','M','L','XL','XXL','XXXL'];
-const NUMBER_SIZES = ['26','27','28','29','30','31','32','33','34','36','38','40','42'];
+const LETTER_SIZES    = ['XS','S','M','L','XL','XXL','XXXL'];
+const NUMBER_SIZES    = ['26','27','28','29','30','31','32','33','34','36','38','40','42'];
+const SHOE_SIZES_US   = ['4','4.5','5','5.5','6','6.5','7','7.5','8','8.5','9','9.5','10','10.5','11','11.5','12','12.5','13','14'];
+const SHOE_SIZES_EU   = ['35','36','37','38','39','40','41','42','43','44','45','46','47','48'];
+const SHOE_TYPES      = ['Shoes / Sneakers','Boots','Sandals'];
 const PRESET_TYPES = [
   'T-Shirt','Shirt / Button-up','Sweater / Hoodie','Jacket / Coat',
   'Suit / Blazer','Dress','Pants / Trousers','Jeans','Shorts','Skirt',
@@ -539,7 +542,7 @@ let entries      = [];
 let editId       = null;
 let brands       = [];           // { id, name, logoUrl, status, suggestedLogoUrl }
 let selectedBrand = null;        // { id, name, logoUrl }
-let sizeMode     = 'letter';     // 'letter' | 'number'
+let sizeMode     = 'letter';     // 'letter' | 'number' | 'shoe-us' | 'shoe-eu'
 let adminBrandId = null;         // brand being edited in admin upload overlay
 
 // ══════════════════════════════════════════════
@@ -794,17 +797,44 @@ document.addEventListener('click', e => {
 // ══════════════════════════════════════════════
 function populateSizeDropdown(currentValue = '') {
   const sel = document.getElementById('fSize');
-  const sizes = sizeMode === 'letter' ? LETTER_SIZES : NUMBER_SIZES;
+  const btn = document.getElementById('sizeToggleBtn');
+  let sizes, toggleLabel, toggleTitle;
+
+  if (sizeMode === 'shoe-us') {
+    sizes = SHOE_SIZES_US; toggleLabel = 'EU'; toggleTitle = 'Switch to EU sizes';
+  } else if (sizeMode === 'shoe-eu') {
+    sizes = SHOE_SIZES_EU; toggleLabel = 'US'; toggleTitle = 'Switch to US sizes';
+  } else if (sizeMode === 'number') {
+    sizes = NUMBER_SIZES; toggleLabel = 'ABC'; toggleTitle = 'Switch to letter sizes';
+  } else {
+    sizes = LETTER_SIZES; toggleLabel = '123'; toggleTitle = 'Switch to numeric sizes';
+  }
+
   sel.innerHTML = '<option value="">— select size —</option>' +
     sizes.map(s => `<option value="${s}"${s === currentValue ? ' selected' : ''}>${s}</option>`).join('');
-  document.getElementById('sizeToggleBtn').textContent = sizeMode === 'letter' ? '123' : 'ABC';
-  document.getElementById('sizeToggleBtn').title = sizeMode === 'letter'
-    ? 'Switch to numeric sizes' : 'Switch to letter sizes';
+  btn.textContent = toggleLabel;
+  btn.title = toggleTitle;
 }
 
 document.getElementById('sizeToggleBtn').addEventListener('click', () => {
-  sizeMode = sizeMode === 'letter' ? 'number' : 'letter';
+  if (sizeMode === 'shoe-us')  sizeMode = 'shoe-eu';
+  else if (sizeMode === 'shoe-eu')  sizeMode = 'shoe-us';
+  else if (sizeMode === 'letter')   sizeMode = 'number';
+  else                              sizeMode = 'letter';
   populateSizeDropdown();
+});
+
+// Auto-switch size mode when type changes
+document.getElementById('fType').addEventListener('change', function () {
+  const type = this.value;
+  const isShoe = SHOE_TYPES.includes(type);
+  if (isShoe && sizeMode !== 'shoe-us' && sizeMode !== 'shoe-eu') {
+    sizeMode = 'shoe-us';
+    populateSizeDropdown();
+  } else if (!isShoe && (sizeMode === 'shoe-us' || sizeMode === 'shoe-eu')) {
+    sizeMode = 'letter';
+    populateSizeDropdown();
+  }
 });
 
 // ══════════════════════════════════════════════
@@ -1157,8 +1187,12 @@ function openModal(id) {
       document.getElementById('brandTriggerLabel').textContent = e.brand;
     }
     setTypeField(e.type);
-    // Set size — detect mode
-    if (NUMBER_SIZES.includes(e.size)) sizeMode = 'number';
+    // Set size — detect mode from type + size value
+    const isShoe = SHOE_TYPES.includes(e.type);
+    if (isShoe && SHOE_SIZES_EU.includes(e.size))       sizeMode = 'shoe-eu';
+    else if (isShoe)                                     sizeMode = 'shoe-us';
+    else if (NUMBER_SIZES.includes(e.size))              sizeMode = 'number';
+    else                                                 sizeMode = 'letter';
     populateSizeDropdown(e.size);
     document.getElementById('fModel').value  = e.model  || '';
     document.getElementById('fChest').value  = e.chest  || '';
