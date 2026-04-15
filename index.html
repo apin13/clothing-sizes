@@ -641,10 +641,9 @@ onAuthStateChanged(auth, async user => {
     document.getElementById('userAvatar').textContent = displayName[0].toUpperCase();
     // Show admin button for admin
     document.getElementById('btnAdminPanel').classList.toggle('hidden', user.uid !== ADMIN_UID);
-    // Seed brands if admin and not seeded yet
+    // Load brands; if admin and collection is empty, seed preset brands
     await loadBrands();
     if (user.uid === ADMIN_UID) await seedBrandsIfNeeded();
-    else await loadBrands(); // reload after potential seed
     await loadEntries();
     render();
   } else {
