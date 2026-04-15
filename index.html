@@ -829,6 +829,16 @@ document.getElementById('btnSubmitNewBrand').addEventListener('click', async () 
   const name = document.getElementById('nbName').value.trim();
   if (!name) { alert('Please enter a brand name.'); return; }
 
+  // Case-insensitive duplicate check
+  const nameLower = name.toLowerCase();
+  const existing = brands.find(b => b.name.toLowerCase() === nameLower);
+  if (existing) {
+    alert(`"${existing.name}" is already in the list.`);
+    closeNewBrandModal();
+    selectBrand(existing);
+    return;
+  }
+
   const file = document.getElementById('nbLogo').files[0];
   if (file && file.size > 512 * 1024) { alert('Logo must be under 512 KB.'); return; }
 
