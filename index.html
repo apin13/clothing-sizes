@@ -665,7 +665,17 @@ onAuthStateChanged(auth, async user => {
 //  BRANDS
 // ══════════════════════════════════════════════
 function clearbitLogo(domain) {
-  return `https://logo.clearbit.com/${domain}`;
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+}
+
+// Convert any stored logo URL to a working one.
+// Clearbit is dead — extract the domain from old clearbit URLs and
+// redirect to Google's favicon service. Firebase Storage URLs pass through.
+function resolveLogoUrl(storedUrl) {
+  if (!storedUrl) return null;
+  const m = storedUrl.match(/logo\.clearbit\.com\/(.+)/);
+  if (m) return `https://www.google.com/s2/favicons?domain=${m[1]}&sz=64`;
+  return storedUrl; // Firebase Storage or other URL — use as-is
 }
 
 async function loadBrands() {
@@ -710,7 +720,7 @@ function buildBrandDropdown(filter = '') {
     opt.className = 'brand-opt' + (selectedBrand && selectedBrand.id === b.id ? ' selected' : '');
     opt.dataset.id = b.id;
 
-    const logoUrl = b.status === 'approved' ? b.logoUrl : null;
+    const logoUrl = b.status === 'approved' ? resolveLogoUrl(b.logoUrl) : null;
     const logoHtml = logoUrl
       ? `<img src="${logoUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><span class="brand-opt-fallback" style="display:none;">${b.name[0]}</span>`
       : `<span class="brand-opt-fallback">${b.name[0]}</span>`;
@@ -732,7 +742,7 @@ function selectBrand(b) {
   selectedBrand = b;
   document.getElementById('fBrand').value = b.name;
   // Update trigger
-  const logoUrl = b.status === 'approved' ? b.logoUrl : null;
+  const logoUrl = b.status === 'approved' ? resolveLogoUrl(b.logoUrl) : null;
   const imgHtml = logoUrl
     ? `<img class="bt-logo" src="${logoUrl}" alt="" onerror="this.style.display='none'" />`
     : `<span class="brand-opt-fallback" style="display:inline-flex;width:22px;height:22px;font-size:.65rem;border-radius:3px;">${b.name[0]}</span>`;
@@ -899,7 +909,7 @@ function makeAdminRow(b, showSuggestion) {
   row.className = 'admin-brand-row';
   row.id = 'admin-row-' + b.id;
 
-  const logoUrl = b.logoUrl || b.suggestedLogoUrl;
+  const logoUrl = resolveLogoUrl(b.logoUrl || b.suggestedLogoUrl);
   const logoHtml = logoUrl
     ? `<img class="admin-logo-box" src="${logoUrl}" alt="" onerror="this.parentElement.innerHTML='<div class=admin-logo-fallback>${b.name[0]}</div>'" />`
     : `<div class="admin-logo-fallback">${b.name[0]}</div>`;
@@ -1046,7 +1056,7 @@ function render() {
 
 function getBrandLogoUrl(brandName) {
   const b = brands.find(x => x.name === brandName);
-  return b && b.status === 'approved' ? b.logoUrl : null;
+  return b && b.status === 'approved' ? resolveLogoUrl(b.logoUrl) : null;
 }
 
 function makeCard(e) {
