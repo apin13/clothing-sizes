@@ -328,6 +328,12 @@
         </div>
       </div>
 
+      <!-- Model / Line -->
+      <div class="field">
+        <label>Model / Line <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+        <input id="fModel" type="text" placeholder="e.g. AIRism, Cotton, DryFit, Slim Fit…" />
+      </div>
+
       <!-- Size with toggle -->
       <div class="size-row">
         <div class="field">
@@ -1097,6 +1103,7 @@ function makeCard(e) {
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <span class="tag">${esc(e.type)}</span>
+      ${e.model ? `<span class="tag" style="background:var(--bg);color:var(--muted);border:1px solid var(--border);">${esc(e.model)}</span>` : ''}
     </div>
     <div class="size-display">${esc(e.size)}</div>
     ${measurements.length ? `<div class="card-meta">${measurements.map(m=>`<span>${m}</span>`).join('')}</div>` : ''}
@@ -1153,6 +1160,7 @@ function openModal(id) {
     // Set size — detect mode
     if (NUMBER_SIZES.includes(e.size)) sizeMode = 'number';
     populateSizeDropdown(e.size);
+    document.getElementById('fModel').value  = e.model  || '';
     document.getElementById('fChest').value  = e.chest  || '';
     document.getElementById('fWaist').value  = e.waist  || '';
     document.getElementById('fLength').value = e.length || '';
@@ -1163,7 +1171,7 @@ function openModal(id) {
     document.getElementById('brandTriggerLabel').innerHTML = '— select brand —';
     setTypeField('');
     populateSizeDropdown();
-    ['fChest','fWaist','fLength','fNotes'].forEach(id => { document.getElementById(id).value = ''; });
+    ['fModel','fChest','fWaist','fLength','fNotes'].forEach(id => { document.getElementById(id).value = ''; });
   }
 
   document.getElementById('overlay').classList.remove('hidden');
@@ -1178,6 +1186,7 @@ function closeModal() {
 async function saveEntry() {
   const brand  = document.getElementById('fBrand').value.trim();
   const type   = getTypeValue();
+  const model  = document.getElementById('fModel').value.trim();
   const size   = document.getElementById('fSize').value;
   const chest  = document.getElementById('fChest').value.trim();
   const waist  = document.getElementById('fWaist').value.trim();
@@ -1193,7 +1202,7 @@ async function saveEntry() {
   saveBtn.innerHTML = '<span class="spinner"></span>';
 
   try {
-    const data = { brand, type, size, chest, waist, length, notes };
+    const data = { brand, type, model, size, chest, waist, length, notes };
     if (editId) await updateEntry(editId, data);
     else        await addEntry(data);
     closeModal();
