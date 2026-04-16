@@ -46,20 +46,54 @@
     #authScreen {
       min-height: 100vh;
       display: flex;
-      align-items: flex-end;
-      justify-content: center;
+      flex-direction: column;
+      justify-content: flex-end;
       background: var(--near-black);
+      position: relative;
+      overflow: hidden;
+    }
+    #authScreen::before {
+      content: '';
+      position: absolute; top: -120px; right: -80px;
+      width: 340px; height: 340px; border-radius: 50%;
+      background: var(--green); opacity: .15;
+    }
+    #authScreen::after {
+      content: '';
+      position: absolute; top: 60px; left: -100px;
+      width: 260px; height: 260px; border-radius: 50%;
+      background: var(--terracotta); opacity: .1;
+    }
+    .auth-hero {
+      flex: 1; display: flex; flex-direction: column;
+      justify-content: center; padding: 60px 28px 32px;
+      position: relative; z-index: 1;
+    }
+    .auth-hero-label {
+      font-size: 11px; font-weight: 500; color: var(--green);
+      text-transform: uppercase; letter-spacing: .12em; margin-bottom: 14px;
+    }
+    .auth-hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2.8rem; font-weight: 700; color: var(--bg);
+      line-height: 1.1; margin-bottom: 12px;
+    }
+    .auth-hero p {
+      font-size: .9rem; color: var(--muted); line-height: 1.6;
     }
     .auth-card {
       background: var(--bg);
-      border-radius: 24px 24px 0 0;
-      padding: 32px 20px 40px;
+      border-radius: 28px 28px 0 0;
+      padding: 28px 20px 44px;
       width: 100%;
-      max-width: 480px;
+      position: relative; z-index: 1;
     }
     @media (min-width: 600px) {
-      #authScreen { align-items: center; padding: 24px; }
-      .auth-card { border-radius: 24px; padding: 36px 32px; box-shadow: 0 24px 64px rgba(0,0,0,.35); }
+      #authScreen { flex-direction: row; align-items: center; justify-content: center; padding: 24px; gap: 40px; }
+      #authScreen::before { top: -160px; right: -100px; width: 500px; height: 500px; }
+      .auth-hero { padding: 40px 0; flex: 1; max-width: 380px; }
+      .auth-hero h1 { font-size: 3.2rem; }
+      .auth-card { border-radius: 24px; padding: 36px 28px; box-shadow: 0 24px 64px rgba(0,0,0,.4); max-width: 420px; flex: 1; }
     }
     .auth-logo { text-align: center; margin-bottom: 28px; }
     .auth-logo svg { color: var(--green); }
@@ -87,12 +121,28 @@
     .setup-banner ol { padding-left: 18px; margin-top: 6px; }
 
     /* ── APP HEADER ── */
-    header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: var(--bg); border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px; }
-    header h1 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.35rem; font-weight: 700; color: var(--near-black); }
+    header {
+      display: flex; flex-direction: column; gap: 0;
+      padding: 52px 20px 0; background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-top { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; }
+    header h1 { font-family: 'Playfair Display', Georgia, serif; font-size: 2rem; font-weight: 700; color: var(--near-black); line-height: 1; }
     header h1 span { color: var(--near-black); }
-    .header-right { display: flex; align-items: center; gap: 10px; }
-    .user-chip { display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--surface); border-radius: 100px; font-size: .82rem; border: 1px solid var(--border); }
-    .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--green); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; flex-shrink: 0; }
+    .header-subtitle { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 4px; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .user-chip { display: flex; align-items: center; gap: 8px; padding: 5px 12px 5px 5px; background: var(--surface); border-radius: 100px; font-size: .82rem; border: 1px solid var(--border); }
+    .user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--green); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; flex-shrink: 0; }
+    /* hide desktop-style add button on mobile, show a compact one */
+    #btnAddHeader { display: none; }
+    @media (min-width: 600px) {
+      header { padding: 20px 24px 0; flex-direction: row; align-items: center; flex-wrap: wrap; }
+      .header-top { padding-bottom: 0; }
+      .header-subtitle { display: none; }
+      header h1 { font-size: 1.4rem; }
+      #btnAddHeader { display: inline-flex; }
+      .btn-logout { display: inline-flex; }
+    }
 
     /* ── BUTTONS ── */
     .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 16px; font-size: .875rem; font-weight: 600; cursor: pointer; border: none; transition: background .15s, transform .1s, opacity .15s; font-family: inherit; }
@@ -133,7 +183,8 @@
     .card-actions { display: flex; gap: 2px; }
     .tag { display: inline-block; padding: 4px 12px; border-radius: 100px; background: var(--green-light); color: var(--green); font-size: .72rem; font-weight: 600; letter-spacing: .02em; }
     .tag-model { display: inline-block; padding: 4px 12px; border-radius: 100px; background: var(--terracotta-light); color: var(--terracotta); font-size: .72rem; font-weight: 600; letter-spacing: .02em; }
-    .size-display { font-family: 'Playfair Display', Georgia, serif; font-size: 1.8rem; font-weight: 700; color: var(--near-black); line-height: 1.1; }
+    .size-display { font-family: 'Playfair Display', Georgia, serif; font-size: 3rem; font-weight: 700; color: var(--near-black); line-height: 1; }
+    .size-display-unit { font-family: 'Inter', sans-serif; font-size: .85rem; font-weight: 400; color: var(--muted); margin-left: 4px; }
     .card-meta { display: flex; flex-wrap: wrap; gap: 6px; }
     .card-meta span { font-size: .78rem; color: var(--muted); background: var(--bg); padding: 3px 10px; border-radius: 100px; }
     .notes { font-size: .82rem; color: var(--muted); line-height: 1.5; font-style: italic; }
@@ -234,6 +285,11 @@
      AUTH SCREEN
 ══════════════════════════════════════════════ -->
 <div id="authScreen">
+  <div class="auth-hero">
+    <div class="auth-hero-label">Your Personal Fit</div>
+    <h1>Know Your<br/>Size.<br/>Always.</h1>
+    <p>Save your measurements once.<br/>Shop confidently everywhere.</p>
+  </div>
   <div class="auth-card">
     <div class="auth-logo">
       <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -286,18 +342,23 @@
 ══════════════════════════════════════════════ -->
 <div id="appScreen" class="hidden">
   <header>
-    <h1>My <span>Sizes</span></h1>
-    <div class="header-right">
-      <div class="user-chip">
-        <div class="user-avatar" id="userAvatar">?</div>
-        <span id="userEmail">—</span>
+    <div class="header-top">
+      <div>
+        <div class="header-subtitle">My Wardrobe</div>
+        <h1>My <span>Sizes</span></h1>
       </div>
-      <button class="btn btn-admin hidden" id="btnAdminPanel">Admin</button>
-      <button class="btn btn-logout" id="btnLogout">Sign out</button>
-      <button class="btn btn-primary" id="btnAddHeader">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-        Add Size
-      </button>
+      <div class="header-right">
+        <div class="user-chip">
+          <div class="user-avatar" id="userAvatar">?</div>
+          <span id="userEmail">—</span>
+        </div>
+        <button class="btn btn-admin hidden" id="btnAdminPanel">Admin</button>
+        <button class="btn btn-logout" id="btnLogout">Sign out</button>
+        <button class="btn btn-primary" id="btnAddHeader">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          Add Size
+        </button>
+      </div>
     </div>
   </header>
 
